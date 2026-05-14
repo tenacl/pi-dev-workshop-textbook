@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>pi.dev 교재 · 전체 그림</title>
+<style>
+  :root {
+    --bg: #080e1c; --bg-elev: #0f1830; --bg-card: #131e3a;
+    --border: #1f2c4f; --text: #e7ecf7; --text-dim: #99a4c0;
+    --text-mute: #6c7693; --accent: #f5c842; --link: #7cc4ff;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Apple SD Gothic Neo", "Segoe UI", system-ui, sans-serif; line-height: 1.7; }
+  main { max-width: 920px; margin: 0 auto; padding: 48px 28px; }
+  h1 { font-size: 30px; margin: 0 0 6px; }
+  .sub { color: var(--text-dim); margin: 0 0 24px; }
+  .cta { display: inline-block; background: var(--accent); color: #0b1124; padding: 10px 18px; border-radius: 8px; font-weight: 600; text-decoration: none; margin: 6px 8px 24px 0; }
+  .cta.secondary { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+  .part { margin: 24px 0 8px; color: var(--accent); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; }
+  .card { background: var(--bg-card); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 14px 18px; margin: 8px 0; }
+  .card h3 { margin: 0 0 4px; font-size: 16px; }
+  .card p { margin: 0; color: var(--text-dim); font-size: 14px; }
+  .grid { display: grid; gap: 8px; }
+  a { color: var(--link); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  blockquote { margin: 14px 0; padding: 10px 16px; border-left: 3px solid var(--accent); background: #0e1a36; color: var(--text-dim); border-radius: 4px; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+  .meta { color: var(--text-mute); font-size: 13px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>pi.dev로 가지는 AI 만들기</h1>
+  <p class="sub">타이칸 1주 학습 가이드 × 원데이 워크샵 디자인 — 다산 50법으로 익히는 단일 교재</p>
+
+  <a class="cta" href="./textbook.html">교재 열기 →</a>
+  <a class="cta secondary" href="./references.md">참고자료</a>
+
+  <blockquote>"빌려 쓰는 AI에서, 가지는 AI로." — 부품은 카탈로그에서 고르고, 영혼은 직접 쓴다.</blockquote>
+
+  <div class="part">Part 1 · 컨셉</div>
+  <div class="grid">
+    <div class="card"><h3>1. 빌려 쓰는 AI → 가지는 AI</h3><p>본의본령법 — 이 교재의 한 줄. 시간을 자산으로 바꾸는 결정.</p></div>
+    <div class="card"><h3>2. pi 4블록 + 아라 메타포</h3><p>휘분류취법 — Extensions · Skills · Prompts · Themes. 4블록을 가르지 못하면 한 채를 못 조립한다.</p></div>
+  </div>
+
+  <div class="part">Part 2 · 7일 미션 (워크샵 1주 전)</div>
+  <div class="grid">
+    <div class="card"><h3>3. Day 1 — 환경 세트업</h3><p>축기견초법 — pi 설치 · API 키 · 부팅 · examples/ 훑기.</p></div>
+    <div class="card"><h3>4. Day 2 — 예제 분해</h3><p>여박총피법 — 한 채를 끝까지 벗긴다.</p></div>
+    <div class="card"><h3>5. Day 3 — 영혼 작성</h3><p>무징불신법 — persona.md, 본인 결만.</p></div>
+    <div class="card"><h3>6. Day 4 — 능력 1개</h3><p>강구실용법 — <code>/skill:이름</code>으로 매일 부를 능력.</p></div>
+    <div class="card"><h3>7. Day 5 — 외장 1개</h3><p>변례창신법 — 예제 베껴 변형. 0에서 만들지 않는다.</p></div>
+    <div class="card"><h3>8. Day 6 — 통합 시운전</h3><p>반복참정법 — 4블록을 한 채로. 본인 실제 워크 1건.</p></div>
+    <div class="card"><h3>9. Day 7 — 회고 + 데모</h3><p>종핵파즐법 — 5분 시연 시나리오 압축.</p></div>
+  </div>
+
+  <div class="part">Part 3 · 워크샵 펼치기</div>
+  <div class="grid">
+    <div class="card"><h3>10. 워크샵 디자인 결정</h3><p>선정문목법 — Q1~Q6 결정 누적 + 컨셉 한 줄.</p></div>
+    <div class="card"><h3>11. 4시간 흐름 + 사전 체크</h3><p>정과실천법 — 13:00~17:00 단계별 · 사전 안내문 4체크.</p></div>
+    <div class="card"><h3>12. 모듈 카탈로그</h3><p>취선논단법 — 21개 부품 v0.1 운영 원칙 + research-bot 미니 하네스.</p></div>
+  </div>
+
+  <div class="part">부록</div>
+  <div class="grid">
+    <div class="card"><h3>A. 다산 50법 × pi 대응표</h3><p>챕터별 원칙 정리 + 상황별 빠른 참조.</p></div>
+    <div class="card"><h3>B. 실습 체크리스트</h3><p>7일 미션 + 워크샵 준비 체크리스트 한 페이지.</p></div>
+    <div class="card"><h3>C. 핵심 파일 템플릿</h3><p>package.json · persona.md · Skill README · Extension · 카탈로그 양식.</p></div>
+    <div class="card"><h3>D. 참고자료 & 학습 로드맵</h3><p>pi.dev 공식 · 관련 표준 · 6단계 로드맵.</p></div>
+  </div>
+
+  <hr/>
+  <p class="meta">버전 v0.1 · 2026-05-14 · Day 7 회고 후 v0.2로 갱신 예정.</p>
+</main>
+</body>
+</html>
