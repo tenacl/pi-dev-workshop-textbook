@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>pi.dev로 가지는 AI 만들기 — 1주 학습 + 워크샵 설계 교재</title>
+<title>pi.dev 가지는 AI 만들기 v0.2 — 1차 자료 검증판</title>
 <style>
   :root {
     --bg: #080e1c;
@@ -19,12 +19,13 @@
     --link: #7cc4ff;
     --good: #5fd28a;
     --bad: #ff7a7a;
+    --fact: #7cc4ff;
+    --meta: #c692ff;
     --code-bg: #08111f;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Apple SD Gothic Neo", "Segoe UI", system-ui, sans-serif; line-height: 1.7; }
   body { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; }
-  /* Sidebar */
   aside.sidebar {
     position: sticky; top: 0; align-self: start;
     height: 100vh; overflow-y: auto;
@@ -46,10 +47,11 @@
   }
   nav.chapters a:hover { background: #16213f; color: var(--text); }
   nav.chapters a.active { background: #18254a; color: var(--accent); border-left-color: var(--accent); }
-  /* Main */
   main { padding: 48px 64px; max-width: 920px; }
   h1.book-title { font-size: 30px; margin: 0 0 6px; letter-spacing: -0.01em; }
-  .book-subtitle { color: var(--text-dim); margin: 0 0 32px; font-size: 15px; }
+  .book-subtitle { color: var(--text-dim); margin: 0 0 12px; font-size: 15px; }
+  .version-bar { display: flex; gap: 12px; flex-wrap: wrap; font-size: 12px; color: var(--text-mute); margin-bottom: 28px; padding: 8px 12px; background: var(--bg-card); border-radius: 6px; border: 1px solid var(--border); }
+  .version-bar code { font-size: 11px; }
   section.chapter { margin-bottom: 80px; scroll-margin-top: 12px; }
   section.chapter h2 { font-size: 24px; margin: 0 0 6px; }
   section.chapter .chapter-meta { font-size: 12px; color: var(--text-mute); margin-bottom: 18px; letter-spacing: 0.04em; }
@@ -60,7 +62,6 @@
   ul li, ol li { margin: 4px 0; }
   a { color: var(--link); }
   strong { color: var(--text); }
-  /* Dasan principle box */
   .dasan {
     background: var(--accent-soft);
     border: 1px solid var(--accent-line);
@@ -73,17 +74,14 @@
   .dasan .name { font-size: 16px; font-weight: 600; margin: 4px 0 6px; color: var(--text); }
   .dasan .name .hanja { color: var(--text-mute); font-weight: 400; font-size: 14px; margin-left: 6px; }
   .dasan .desc { color: var(--text-dim); font-size: 14px; }
-  /* Tables */
   table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
   th, td { padding: 10px 12px; border: 1px solid var(--border); text-align: left; vertical-align: top; }
   th { background: var(--bg-card); color: var(--accent); font-weight: 600; }
   td { background: #0c1428; color: var(--text); }
-  /* Code */
   pre { background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; overflow-x: auto; font-size: 13px; font-family: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace; color: #e2e8ff; }
   code { font-family: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace; background: #0c1832; padding: 1px 5px; border-radius: 4px; font-size: 13px; color: #ffd874; }
   pre code { background: none; padding: 0; color: inherit; }
-  /* Callouts */
-  .why, .reverse, .practice, .verify {
+  .why, .reverse, .practice, .verify, .fact, .metaphor {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 8px;
@@ -94,12 +92,16 @@
   .reverse { border-left: 3px solid #ff7a7a; }
   .practice { border-left: 3px solid #5fd28a; }
   .verify { border-left: 3px solid var(--accent); }
+  .fact { border-left: 3px solid var(--fact); background: #0a1830; }
+  .metaphor { border-left: 3px solid var(--meta); background: #170e2e; }
   .callout-title { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; }
   .why .callout-title { color: #7cc4ff; }
   .reverse .callout-title { color: #ff7a7a; }
   .practice .callout-title { color: #5fd28a; }
   .verify .callout-title { color: var(--accent); }
-  /* Note (write-your-thought) */
+  .fact .callout-title { color: var(--fact); }
+  .metaphor .callout-title { color: var(--meta); }
+  .fact .src { font-size: 11px; color: var(--text-mute); margin-top: 6px; font-family: "JetBrains Mono", monospace; }
   .note-block { background: #0a1226; border: 1px dashed #2c3a60; border-radius: 8px; padding: 14px 16px; margin: 14px 0; }
   .note-block label { font-size: 12px; color: var(--text-mute); letter-spacing: 0.08em; text-transform: uppercase; }
   textarea.note {
@@ -110,7 +112,6 @@
     resize: vertical;
   }
   textarea.note:focus { outline: none; border-color: var(--accent); }
-  /* Nav buttons */
   .chapter-nav { display: flex; gap: 12px; margin-top: 36px; }
   .chapter-nav a {
     flex: 1; padding: 12px 16px; border-radius: 8px;
@@ -123,7 +124,6 @@
   .chapter-nav a.next { text-align: right; }
   .chapter-nav a .dir { display: block; font-size: 11px; color: var(--text-mute); letter-spacing: 0.08em; text-transform: uppercase; }
   .chapter-nav a.disabled { opacity: 0.3; pointer-events: none; }
-  /* Quote */
   blockquote {
     margin: 14px 0; padding: 10px 16px;
     border-left: 3px solid var(--accent);
@@ -131,7 +131,6 @@
     border-radius: 4px;
   }
   hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
-  /* Responsive */
   @media (max-width: 980px) {
     body { grid-template-columns: 1fr; }
     aside.sidebar { position: relative; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
@@ -143,20 +142,20 @@
 
 <aside class="sidebar">
   <div class="brand">📡 pi.dev Textbook</div>
-  <div class="brand-sub">빌려 쓰는 AI에서, 가지는 AI로</div>
+  <div class="brand-sub">v0.2 · 1차 자료 검증판</div>
   <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
   <div class="progress-label" id="progressLabel">0 / 12 챕터</div>
   <nav class="chapters" id="chaptersNav">
     <div class="group">Part 1. 컨셉</div>
     <a href="#ch1">1. 빌려 쓰는 AI → 가지는 AI</a>
-    <a href="#ch2">2. pi 4블록 + 아라 메타포</a>
+    <a href="#ch2">2. pi의 4가지 커스터마이징</a>
     <div class="group">Part 2. 7일 미션</div>
-    <a href="#ch3">3. Day 1 · 환경 세트업</a>
+    <a href="#ch3">3. Day 1 · 설치 + 부팅</a>
     <a href="#ch4">4. Day 2 · 예제 분해</a>
-    <a href="#ch5">5. Day 3 · 영혼 작성</a>
-    <a href="#ch6">6. Day 4 · 능력 1개</a>
-    <a href="#ch7">7. Day 5 · 외장 1개</a>
-    <a href="#ch8">8. Day 6 · 통합 시운전</a>
+    <a href="#ch5">5. Day 3 · 영혼 (AGENTS.md + Prompt)</a>
+    <a href="#ch6">6. Day 4 · Skill 1개</a>
+    <a href="#ch7">7. Day 5 · Extension 1개</a>
+    <a href="#ch8">8. Day 6 · Pi Package 묶기</a>
     <a href="#ch9">9. Day 7 · 회고 + 데모</a>
     <div class="group">Part 3. 워크샵 펼치기</div>
     <a href="#ch10">10. 워크샵 디자인 결정</a>
@@ -173,7 +172,20 @@
 <main>
 
 <h1 class="book-title">pi.dev로 가지는 AI 만들기</h1>
-<p class="book-subtitle">타이칸 1주 학습 가이드 × 원데이 워크샵 디자인 — 다산 50법으로 익히는 단일 교재</p>
+<p class="book-subtitle">v0.2 · 1차 자료 검증판 — 타이칸 1주 학습 가이드 × 원데이 워크샵 설계</p>
+<div class="version-bar">
+  <span>📌 <strong>1차 자료</strong>: <a href="https://github.com/earendil-works/pi" target="_blank">earendil-works/pi</a> @ commit <code>40c05f55</code></span>
+  <span>📅 검증일: 2026-05-14</span>
+  <span>📘 v0.2 (v0.1 무징불신법 위반 수정판)</span>
+</div>
+
+<div class="fact">
+  <div class="callout-title">📖 이 교재를 읽는 법</div>
+  <p>
+    이 교재에는 두 종류의 박스가 섞여 있다. <strong>📗 fact 박스</strong>는 <a href="https://github.com/earendil-works/pi">pi 공식 레포</a>에서 직접 확인한 사실, <strong>🎭 metaphor 박스</strong>는 타이칸 강의용 비유다. 두 개를 섞지 마라 — pi 공식 문서엔 "아라", "영혼" 같은 표현이 없다. 워크샵에서 비유로 가르치되, 실제 pi 구조는 fact 박스 기준으로 외운다.
+  </p>
+  <div class="src">근거: pi/README.md, pi/packages/coding-agent/README.md, pi/packages/coding-agent/docs/ 전반</div>
+</div>
 
 <!-- ============== CH1 ============== -->
 <section class="chapter" id="ch1">
@@ -188,31 +200,49 @@
 
   <h3>핵심 개념</h3>
   <p>
-    이 교재의 한 줄 컨셉은 단순하다. <strong>빌려 쓰는 AI에서, 가지는 AI로.</strong>
-    ChatGPT 창에 들어가서 매번 같은 페르소나 프롬프트를 다시 붙여넣고, 같은 첨부파일을 다시 올리고, 같은 톤을 다시 설명하는 것 — 그건 <em>빌려 쓰는 AI</em>다.
-    pi.dev는 그 모든 박제 가능한 것(인격·도구·능력·외관)을 파일로 만들어 본인 시스템 안에 둔다. 한 번 만들면 매일 부른다. 이게 <em>가지는 AI</em>다.
+    이 워크샵의 한 줄 컨셉은 단순하다. <strong>빌려 쓰는 AI에서, 가지는 AI로.</strong>
+    ChatGPT 창에 들어가서 매번 같은 페르소나 프롬프트를 다시 붙여넣고, 같은 첨부파일을 다시 올리고, 같은 톤을 다시 설명하는 것 — 그건 빌려 쓰는 AI다.
+    pi.dev로 만든 한 채는 그 박제 가능한 것(컨텍스트, 슬래시 커맨드, 호출 능력, 외부 시스템 연결)을 파일로 만들어 본인 시스템에 둔다.
   </p>
-  <p>
-    메타포는 두 개를 겹쳐 쓴다. 하드웨어 쪽에서는 <strong>프로젝트 아라</strong> — 모듈식 스마트폰. 영혼 쪽에서는 <strong>소설가</strong> — 캐릭터를 글로 박제하는 사람. 둘이 합쳐져서, pi 한 채는 "내가 조립한 하드웨어에 내가 쓴 영혼이 박힌 에이전트"가 된다.
-  </p>
+
+  <div class="metaphor">
+    <div class="callout-title">🎭 강의용 비유 (pi 공식 표현 아님)</div>
+    <p>
+      이 워크샵은 두 개의 비유를 겹쳐 쓴다.
+      <strong>프로젝트 아라</strong>(모듈러 스마트폰)와 <strong>소설가가 캐릭터를 글로 박제하는 작업</strong>.
+      "내가 조립한 하드웨어 위에 내가 쓴 영혼이 박힌 에이전트" — 이 감각이 워크샵의 정서적 약속이다.
+      <strong>다만 pi 공식 자료엔 "아라", "영혼", "박제" 같은 단어가 없다.</strong> 비유는 강의 안에서만 통용된다.
+    </p>
+  </div>
+
+  <div class="fact">
+    <div class="callout-title">📗 pi의 공식 한 줄</div>
+    <blockquote>"Pi is a minimal terminal coding harness. Adapt pi to your workflows, not the other way around, without having to fork and modify pi internals."</blockquote>
+    <p>
+      한국어로: <em>pi는 미니멀한 터미널 코딩 하네스다. pi를 본인 워크플로우에 맞춰라 — 본인 워크플로우를 pi에 맞추지 말고.</em>
+      "가지는 AI"는 이 공식 약속의 강의용 번역이다.
+    </p>
+    <div class="src">출처: packages/coding-agent/README.md:20</div>
+  </div>
 
   <div class="why">
     <div class="callout-title">왜 이게 필요한가? · 여박총피법</div>
     <p>
-      한 겹 더 벗기면 이건 단순한 도구 선택 문제가 아니다. ChatGPT를 잘 쓰는 사람과 본인 에이전트를 가진 사람의 차이는 <strong>축적 여부</strong>다. 빌려 쓰는 사람은 매 대화가 0에서 시작한다. 가진 사람은 매 대화가 자기가 쌓아온 자산 위에서 시작한다.
+      한 겹 더 벗기면 이건 단순한 도구 선택 문제가 아니다. ChatGPT를 잘 쓰는 사람과 본인 도구를 가진 사람의 차이는 <strong>축적 여부</strong>다. 빌려 쓰는 사람은 매 대화가 0에서 시작한다. 가진 사람은 매 대화가 자기가 쌓아온 자산 위에서 시작한다.
       1년 후 둘 사이 격차는 도구 차이가 아니라 자산 차이로 벌어진다.
     </p>
   </div>
 
   <h3>비교로 이해하기 · 피차비대법</h3>
   <table>
-    <thead><tr><th>구분</th><th>빌려 쓰는 AI</th><th>가지는 AI (pi)</th></tr></thead>
+    <thead><tr><th>구분</th><th>빌려 쓰는 AI</th><th>pi로 가진 AI</th></tr></thead>
     <tbody>
-      <tr><td>인격</td><td>매번 프롬프트로 재설명</td><td><code>persona.md</code>로 박제 · 자동 로드</td></tr>
-      <tr><td>능력</td><td>외부 플러그인 골라 쓰기</td><td><code>/skill:이름</code>으로 본인이 정의</td></tr>
-      <tr><td>도구</td><td>제공된 것만</td><td>TypeScript Extension으로 직접 추가</td></tr>
-      <tr><td>축적</td><td>대화 닫으면 사라짐</td><td>git/npm 패키지로 버전 관리</td></tr>
-      <tr><td>이동성</td><td>해당 서비스 안에서만</td><td>본인 터미널 어디서나</td></tr>
+      <tr><td>컨텍스트</td><td>매번 다시 붙여넣기</td><td><code>AGENTS.md</code> / <code>CLAUDE.md</code> 자동 로드</td></tr>
+      <tr><td>반복 프롬프트</td><td>매번 다시 타이핑</td><td><code>/name</code>으로 expand되는 Prompt Template</td></tr>
+      <tr><td>능력</td><td>제공된 플러그인만</td><td><code>/skill:name</code>으로 본인이 정의 (Agent Skills 표준)</td></tr>
+      <tr><td>도구</td><td>고정</td><td>TypeScript Extension으로 추가</td></tr>
+      <tr><td>축적</td><td>대화 닫으면 사라짐</td><td>JSONL 세션 + git/npm 패키지</td></tr>
+      <tr><td>이동성</td><td>해당 서비스 안</td><td>본인 터미널 어디서나 (`~/.pi/agent/`)</td></tr>
     </tbody>
   </table>
 
@@ -250,60 +280,148 @@
 
   <div class="chapter-nav">
     <a class="prev disabled" href="#"><span class="dir">← 이전</span>—</a>
-    <a class="next" href="#ch2"><span class="dir">다음 →</span>2. pi 4블록 + 아라 메타포</a>
+    <a class="next" href="#ch2"><span class="dir">다음 →</span>2. pi의 4가지 커스터마이징</a>
   </div>
 </section>
 
 <!-- ============== CH2 ============== -->
 <section class="chapter" id="ch2">
-  <h2>2장. pi 4블록 + 아라 메타포</h2>
+  <h2>2장. pi의 4가지 커스터마이징 + Pi Package</h2>
   <div class="chapter-meta">Part 1 · 컨셉</div>
 
   <div class="dasan">
     <div class="label">🏛️ 다산 원칙</div>
     <div class="name">휘분류취법 <span class="hanja">彙分類聚</span></div>
-    <div class="desc">모아서 나누고 분류하여 모아라. pi의 구성요소를 4개로 분류해 머리에 박는 것이 시작이다. 4개를 못 가르면 한 채를 못 조립한다.</div>
+    <div class="desc">모아서 나누고 분류하여 모아라. pi가 정의한 4종 커스터마이징을 정확한 이름·역할·위치로 외운다. 비유로 외우면 공식 docs와 어긋난다.</div>
   </div>
 
-  <h3>핵심 개념</h3>
-  <p>pi 하네스 한 채는 4개의 블록으로 이뤄진다. 이걸 외우면 절반은 끝난다.</p>
+  <h3>핵심 개념 — pi가 공식 정의한 4가지 커스터마이징</h3>
+  <p>pi는 다음 4가지를 통해 본인 워크플로우에 맞게 확장된다. 4가지는 모두 파일로 박혀 npm/git으로 공유 가능하다.</p>
 
+  <div class="fact">
+    <div class="callout-title">📗 pi 공식 (README.md:20에서 직접 인용)</div>
+    <blockquote>"Extend it with TypeScript <strong>Extensions</strong>, <strong>Skills</strong>, <strong>Prompt Templates</strong>, and <strong>Themes</strong>. Put your extensions, skills, prompt templates, and themes in <strong>Pi Packages</strong> and share them with others via npm or git."</blockquote>
+    <p>이 문장이 4가지 커스터마이징의 공식 정의다. 비유 없이 그대로 외운다.</p>
+    <div class="src">출처: packages/coding-agent/README.md:20</div>
+  </div>
+
+  <h3>4가지 커스터마이징 (공식 docs 정의)</h3>
   <table>
-    <thead><tr><th>블록</th><th>정의</th><th>아라 비유</th><th>역할</th></tr></thead>
+    <thead><tr><th>종류</th><th>공식 정의</th><th>파일 형식</th><th>호출/적용 방식</th></tr></thead>
     <tbody>
-      <tr><td>🧩 <strong>Extensions</strong></td><td>TypeScript 모듈. 커스텀 도구·UI·이벤트 핸들러.</td><td>외장 부품 (카메라·마이크)</td><td>외부 세계와의 연결</td></tr>
-      <tr><td>🛠️ <strong>Skills</strong></td><td>Agent Skills 표준. <code>/skill:name</code>으로 호출. README + 도구 묶음.</td><td>능력 칩 (회로)</td><td>"무엇을 할 수 있는가"</td></tr>
-      <tr><td>✍️ <strong>Prompt Templates</strong></td><td>마크다운 재사용 프롬프트. 인격·톤 박제.</td><td><strong>에이전트의 영혼</strong></td><td>"누구로서 답하는가"</td></tr>
-      <tr><td>🎨 <strong>Themes</strong></td><td>터미널 UI 스타일.</td><td>외관 케이스</td><td>시각적 결</td></tr>
+      <tr>
+        <td>✍️ <strong>Prompt Templates</strong></td>
+        <td>"Reusable prompts as Markdown files. Type <code>/name</code> to expand."</td>
+        <td><code>.md</code> 한 장 (frontmatter 옵션)</td>
+        <td><code>/name</code>으로 슬래시 커맨드처럼 expand. <code>$1</code>/<code>$@</code>/<code>{{var}}</code> 인자.</td>
+      </tr>
+      <tr>
+        <td>🛠️ <strong>Skills</strong></td>
+        <td>"On-demand capability packages following the Agent Skills standard."</td>
+        <td>디렉토리 + <code>SKILL.md</code> (필수 frontmatter: <code>name</code>, <code>description</code>)</td>
+        <td><code>/skill:name</code> 명시 호출 또는 description 매칭 시 에이전트가 자동 로드 (progressive disclosure).</td>
+      </tr>
+      <tr>
+        <td>🧩 <strong>Extensions</strong></td>
+        <td>"TypeScript modules that extend pi with custom tools, commands, keyboard shortcuts, event handlers, and UI components."</td>
+        <td><code>.ts</code> (또는 <code>.js</code>) — <code>ExtensionAPI</code> 등록</td>
+        <td>pi 부팅 시 자동 로드. tool/command/keybind/event/UI 등록.</td>
+      </tr>
+      <tr>
+        <td>🎨 <strong>Themes</strong></td>
+        <td>"Built-in: dark, light. Themes hot-reload."</td>
+        <td><code>.json</code></td>
+        <td>활성 테마 파일 수정 시 즉시 반영.</td>
+      </tr>
     </tbody>
   </table>
+  <p style="font-size:13px;color:var(--text-mute);">출처: README.md:313~379 (Customization 섹션), docs/{prompt-templates,skills,extensions,themes}.md. 순서도 공식 docs 순서를 따랐다.</p>
 
-  <p>그리고 이 4블록을 묶는 단위 — <strong>Pi Package</strong>가 있다.</p>
-  <pre><code>// package.json
-{
-  "name": "@taikhan/research-bot",
+  <div class="fact">
+    <div class="callout-title">📗 각 커스터마이징의 로드 위치 (공식)</div>
+    <ul>
+      <li><strong>Prompt Templates</strong>: <code>~/.pi/agent/prompts/</code> (글로벌) · <code>.pi/prompts/</code> (프로젝트) · Pi Package · settings · <code>--prompt-template</code></li>
+      <li><strong>Skills</strong>: <code>~/.pi/agent/skills/</code>, <code>~/.agents/skills/</code> (글로벌) · <code>.pi/skills/</code>, <code>.agents/skills/</code> (cwd부터 부모 디렉토리들) · Pi Package · settings · <code>--skill</code></li>
+      <li><strong>Extensions</strong>: <code>~/.pi/agent/extensions/</code> · <code>.pi/extensions/</code> · Pi Package · <code>-e</code> 플래그</li>
+      <li><strong>Themes</strong>: <code>~/.pi/agent/themes/</code> · <code>.pi/themes/</code> · Pi Package</li>
+    </ul>
+    <div class="src">출처: docs/prompt-templates.md, docs/skills.md, docs/extensions.md, docs/themes.md</div>
+  </div>
+
+  <h3>Pi Package — 4가지를 묶어 배포하는 단위</h3>
+
+  <div class="fact">
+    <div class="callout-title">📗 Pi Package 매니페스트 — 공식 형태 (정확히 이대로)</div>
+    <pre><code>{
+  "name": "my-package",
+  "keywords": ["pi-package"],
   "pi": {
-    "extensions": ["./ext/web-search.ts"],
-    "skills": ["./skills/lecture-research"],
-    "prompts": ["./prompts/persona-taikan.md"],
-    "themes": ["./themes/calm-dark.json"]
+    "extensions": ["./extensions"],
+    "skills": ["./skills"],
+    "prompts": ["./prompts"],
+    "themes": ["./themes"]
   }
 }</code></pre>
-  <p>이 매니페스트가 4블록을 한 채로 묶어 npm/git으로 배포 가능하게 한다. 즉 "내 에이전트 한 채"가 패키지가 된다.</p>
+    <ul>
+      <li><strong><code>keywords: ["pi-package"]</code> 필수</strong> — npm 검색과 <a href="https://pi.dev/packages">pi.dev/packages 갤러리</a> 노출용. 빠뜨리면 발견 안 됨.</li>
+      <li><strong>값은 디렉토리 경로</strong> — 글로브와 <code>!exclude</code> 패턴 지원.</li>
+      <li><strong>매니페스트 없어도 OK</strong> — <code>extensions/</code>, <code>skills/</code>, <code>prompts/</code>, <code>themes/</code> 관례 디렉토리에서 자동 발견.</li>
+    </ul>
+    <div class="src">출처: docs/packages.md:113~126</div>
+  </div>
+
+  <div class="fact">
+    <div class="callout-title">📗 설치/제거/업데이트 명령 (공식 CLI)</div>
+    <pre><code>pi install npm:@scope/pkg              # npm 패키지
+pi install npm:@scope/pkg@1.2.3        # 버전 핀 (pi update에서 스킵됨)
+pi install git:github.com/user/repo    # git 패키지 (단축형)
+pi install https://github.com/user/repo
+pi install ssh://git@github.com/user/repo
+pi install ./relative/path             # 로컬
+
+pi install &lt;source&gt; -l                # 프로젝트 로컬 (.pi/ 안에)
+pi remove npm:@scope/pkg
+pi list
+pi update                              # pi 본체 + 핀 안 된 패키지 전부
+pi update --extensions                 # 패키지만
+pi update --self                       # pi 본체만
+pi config                              # 켜기/끄기 토글</code></pre>
+    <div class="src">출처: docs/packages.md:18~37, README.md:387~410</div>
+  </div>
+
+  <div class="fact" style="border-left-color: #ff7a7a;">
+    <div class="callout-title" style="color: #ff7a7a;">⚠️ 보안 경고 (공식 — 무시 금지)</div>
+    <blockquote>"Pi packages run with full system access. Extensions execute arbitrary code, and skills can instruct the model to perform any action including running executables. Review source code before installing third-party packages."</blockquote>
+    <p>한국어: <em>pi 패키지는 시스템 전체 권한으로 돈다. Extension은 임의 코드를 실행하고, Skill은 모델에게 실행파일 호출 포함 어떤 작업이든 지시할 수 있다. 서드파티 패키지 설치 전에 소스를 직접 확인하라.</em></p>
+    <div class="src">출처: README.md:385, docs/packages.md:20</div>
+  </div>
+
+  <div class="metaphor">
+    <div class="callout-title">🎭 강의용 비유 (pi 공식 표현 아님)</div>
+    <table>
+      <thead><tr><th>4가지</th><th>아라 비유</th><th>역할 비유</th></tr></thead>
+      <tbody>
+        <tr><td>Prompt Templates</td><td>🎴 자주 쓰는 마법 카드</td><td>"같은 말 반복 비용 0"</td></tr>
+        <tr><td>Skills</td><td>🛠️ 능력 칩 (회로)</td><td>"호출 가능한 동사"</td></tr>
+        <tr><td>Extensions</td><td>🧩 외장 부품 (카메라·마이크)</td><td>"본인 시스템과 LLM 연결 다리"</td></tr>
+        <tr><td>Themes</td><td>🎨 케이스 외관</td><td>"시각적 결"</td></tr>
+      </tbody>
+    </table>
+    <p>이 비유는 워크샵에서 외우기 쉽게 쓰는 표현이다. <strong>실제 pi docs엔 없다.</strong> 비유로 입문하되, 구현은 위 fact 박스 기준으로 한다.</p>
+  </div>
 
   <div class="why">
     <div class="callout-title">왜 이게 필요한가? · 여박총피법</div>
     <p>
-      왜 4개로 굳이 가르나? 한 덩어리로 두면 안 되나? 한 겹 벗기면 답이 나온다. 4개로 가르는 이유는 <strong>각 블록의 수정 주기가 다르기 때문</strong>이다.
-      영혼(persona)은 거의 안 바뀐다. 능력(skill)은 가끔 늘어난다. 외장(extension)은 도구 추가할 때만 손댄다. 외관(theme)은 기분에 따라 갈아끼운다.
-      한 덩어리로 묶으면 매번 다 손대야 한다. 갈라 두면 필요한 것만 손댄다. 이게 모듈러 설계의 진짜 이유다.
+      왜 4개로 가르나? 한 겹 벗기면 <strong>각 종류의 수정 주기가 다르기 때문</strong>이다. Prompt Template은 같은 말 반복 줄이기, Skill은 호출 가능한 능력, Extension은 외부 시스템 연결, Theme은 시각. 한 덩어리로 묶으면 매번 다 손대야 한다. 갈라 두면 필요한 것만 손댄다.
+      그리고 4가지 다 똑같이 <code>~/.pi/agent/</code> 아래 자기 자리에 들어간다 — 이게 pi의 일관된 약속.
     </p>
   </div>
 
   <div class="reverse">
     <div class="callout-title">반대로 생각하면? · 일반지도법</div>
     <p>
-      4블록 구분 없이 그냥 한 마크다운에 다 박아도 작동은 한다. 단, 다음 워크플로우 만들 때 처음부터 다시 박아야 한다. 영혼을 재활용 못 한다. 능력을 다른 봇과 공유 못 한다.
+      4가지 구분 없이 그냥 한 마크다운에 다 박아도 작동은 한다. 단, 다음 워크플로우 만들 때 처음부터 다시 박아야 한다. Prompt를 재활용 못 한다. Skill을 다른 봇과 공유 못 한다.
       모듈러 설계의 비용은 처음 한 번 가르는 수고고, 보상은 매 사이클마다 발생한다.
     </p>
   </div>
@@ -312,35 +430,35 @@
     <div class="callout-title">실습 · 정과실천법</div>
     <ol>
       <li>1장에서 정한 타깃 워크플로우를 떠올린다.</li>
-      <li>그 워크플로우를 위 4블록으로 가른다. 종이에 4칸을 그린다.</li>
-      <li>각 칸에 "이 워크플로우의 영혼/능력/외장/외관"이 무엇인지 한 줄씩 쓴다. 모르겠으면 "?"라고 써둔다. ?가 1주 미션에서 채워질 것이다.</li>
+      <li>그 워크플로우를 4가지 칸으로 가른다. 종이에 4칸을 그린다 — <strong>Prompt Templates / Skills / Extensions / Themes</strong> (공식 docs 순서).</li>
+      <li>각 칸에 "이 워크플로우의 어떤 부분이 여기에 속할지" 한 줄씩 쓴다. 모르겠으면 <code>?</code>. <code>?</code>는 1주 미션에서 채워질 빈칸.</li>
     </ol>
-    <p><strong>완료 조건:</strong> 4블록 종이가 완성되고, 각 칸이 한 줄이라도 채워짐 (? 포함).</p>
+    <p><strong>완료 조건:</strong> 4칸 종이가 완성되고, 각 칸이 한 줄이라도 채워짐.</p>
   </div>
 
   <div class="note-block">
     <label>📝 내 생각 쓰기 · 수사차록법</label>
-    <textarea class="note" placeholder="내 타깃 워크플로우의 4블록 — Extension / Skill / Prompt / Theme — 각각 한 줄."></textarea>
+    <textarea class="note" placeholder="내 타깃 워크플로우의 4가지 — Prompt Templates / Skills / Extensions / Themes — 각각 한 줄."></textarea>
   </div>
 
   <div class="verify">
     <div class="callout-title">다시 확인 · 반복참정법</div>
     <ol>
-      <li>4블록의 이름을 보지 않고 댈 수 있는가?</li>
-      <li>"영혼"에 해당하는 블록은 어느 것인가?</li>
-      <li>Pi Package는 무엇을 하는 단위인가?</li>
+      <li>4가지 커스터마이징의 공식 이름을 순서대로 댈 수 있는가? (Prompt Templates → Skills → Extensions → Themes)</li>
+      <li>Pi Package 매니페스트에서 빠뜨리면 안 되는 키 1개는? (<code>keywords: ["pi-package"]</code>)</li>
+      <li>"pi 패키지는 시스템 전체 권한으로 돈다"의 의미를 본인이 다른 사람에게 한 줄로 설명할 수 있는가?</li>
     </ol>
   </div>
 
   <div class="chapter-nav">
     <a class="prev" href="#ch1"><span class="dir">← 이전</span>1. 빌려 쓰는 AI → 가지는 AI</a>
-    <a class="next" href="#ch3"><span class="dir">다음 →</span>3. Day 1 · 환경 세트업</a>
+    <a class="next" href="#ch3"><span class="dir">다음 →</span>3. Day 1 · 설치 + 부팅</a>
   </div>
 </section>
 
 <!-- ============== CH3 (Day 1) ============== -->
 <section class="chapter" id="ch3">
-  <h2>3장. Day 1 — 환경 세트업 + pi 부팅</h2>
+  <h2>3장. Day 1 — 설치 + 부팅 + 기본 도구 파악</h2>
   <div class="chapter-meta">Part 2 · 7일 미션 · 1~2시간</div>
 
   <div class="dasan">
@@ -349,19 +467,49 @@
     <div class="desc">기초부터 단단히. 환경이 흔들리면 그 위에 쌓는 모든 것이 흔들린다. Day 1은 "잘 깔리는가"만 본다.</div>
   </div>
 
-  <h3>핵심 개념</h3>
-  <p>오늘은 도구가 들어오게 한다. 그게 전부다. pi.dev를 설치하고, API 키 1개를 연결하고, 부팅이 되는지 확인한다. 부팅이 되면 examples/ 디렉토리를 한 번 훑는다.</p>
+  <h3>핵심 — pi가 부팅되고, 기본 도구 4개가 어떻게 돈다는 것만 확인</h3>
 
-  <pre><code># 설치 (npm)
-npm install -g @earendil-works/pi
-# 또는 공식 install 스크립트 (pi.dev 참고)
+  <div class="fact">
+    <div class="callout-title">📗 공식 설치 명령 (Quick Start)</div>
+    <pre><code># 옵션 1: 공식 install 스크립트
+curl -fsSL https://pi.dev/install.sh | sh
 
-# 부팅 확인
+# 옵션 2: npm 글로벌
+npm install -g @earendil-works/pi-coding-agent</code></pre>
+    <p>패키지 이름은 <code>@earendil-works/pi-coding-agent</code>. (v0.1에서 잘못 쓴 <code>@earendil-works/pi</code>가 아니다.)</p>
+    <div class="src">출처: README.md:68~78</div>
+  </div>
+
+  <div class="fact">
+    <div class="callout-title">📗 인증 — API 키 OR 구독 로그인 (공식)</div>
+    <pre><code># 방법 A: API 키 (환경변수)
+export ANTHROPIC_API_KEY=sk-ant-...
 pi
-# &gt; hello, who are you?
-</code></pre>
 
-  <p>API 키는 Claude / OpenAI / Gemini 중 본인이 결제 가능한 1개면 된다. 강의용으로는 Claude(Anthropic) 추천 — Skill·Prompt 호환성이 가장 좋다.</p>
+# 방법 B: 구독 OAuth 로그인
+pi
+/login   # Anthropic Claude Pro/Max · OpenAI ChatGPT Plus/Pro · GitHub Copilot 중 선택</code></pre>
+    <p>지원 구독: <strong>Anthropic Claude Pro/Max</strong>, <strong>OpenAI ChatGPT Plus/Pro (Codex)</strong>, <strong>GitHub Copilot</strong>.</p>
+    <p>API 키 지원: Anthropic, OpenAI, Azure OpenAI, DeepSeek, Google Gemini/Vertex, Amazon Bedrock, Mistral, Groq, Cerebras, Cloudflare, xAI, OpenRouter, Vercel AI Gateway, Hugging Face, Fireworks, Together AI, Kimi, MiniMax, Xiaomi MiMo 등.</p>
+    <div class="src">출처: README.md:80~136 (Providers & Models)</div>
+  </div>
+
+  <div class="fact">
+    <div class="callout-title">📗 기본 도구 — 자동 활성화 vs 사용 가능한 전체</div>
+    <ul>
+      <li><strong>기본 활성</strong> (플래그 없이 부팅 시): <code>read</code>, <code>write</code>, <code>edit</code>, <code>bash</code> — 모델이 즉시 호출 가능한 4개.</li>
+      <li><strong>전체 사용 가능</strong> (built-in pool): <code>read</code>, <code>bash</code>, <code>edit</code>, <code>write</code>, <code>grep</code>, <code>find</code>, <code>ls</code> — 7개. <code>--tools</code>로 골라 활성화.</li>
+    </ul>
+    <pre><code># 읽기 전용 모드 (코드 리뷰용)
+pi --tools read,grep,find,ls -p "Review the code"
+
+# 전부 끄기
+pi --no-tools
+
+# 빌트인 끄고 extension 도구만
+pi --no-builtin-tools</code></pre>
+    <div class="src">출처: README.md:94 (default 4), README.md:555 (available 7), src/core/sdk.ts:55,62 (default 활성 = read/bash/edit/write)</div>
+  </div>
 
   <div class="why">
     <div class="callout-title">왜 이게 필요한가? · 여박총피법</div>
@@ -375,9 +523,9 @@ pi
   <table>
     <thead><tr><th>설치 방식</th><th>장점</th><th>단점</th></tr></thead>
     <tbody>
-      <tr><td>npm 글로벌</td><td>업데이트 쉬움 · 익숙</td><td>Node 버전·권한 이슈</td></tr>
-      <tr><td>공식 install 스크립트</td><td>의존성 자동</td><td>설치 위치 불명확할 수 있음</td></tr>
-      <tr><td>레포 클론 후 로컬</td><td>소스 보면서 학습 가능</td><td>경로 관리 번거로움</td></tr>
+      <tr><td>공식 <code>curl install.sh</code></td><td>가장 빠름 · 의존성 자동</td><td>설치 위치 불명확할 수 있음</td></tr>
+      <tr><td>npm 글로벌 <code>@earendil-works/pi-coding-agent</code></td><td>버전 관리 명확 · 익숙</td><td>Node 버전·권한 이슈</td></tr>
+      <tr><td>레포 클론 후 <code>./pi-test.sh</code></td><td>소스 보면서 학습 가능 (v0.1 강사 패스)</td><td>경로 관리 번거로움</td></tr>
     </tbody>
   </table>
 
@@ -391,13 +539,13 @@ pi
   <div class="practice">
     <div class="callout-title">실습 · 정과실천법</div>
     <ol>
-      <li><strong>pi.dev 설치</strong> — npm 또는 공식 스크립트.</li>
-      <li><strong>API 키 1개 설정</strong> — <code>~/.zshrc</code> 또는 셸 환경변수.</li>
-      <li><strong>첫 실행</strong> — 터미널에서 <code>pi</code>, "hello, who are you?" 한 줄 던지기.</li>
-      <li><strong>examples/ 훑기</strong> — pi 레포의 <code>examples/</code> 디렉토리(50개+ 예제). 디렉토리 이름만 봐도 좋음.</li>
-      <li><strong>막힌 지점 메모</strong> — 30분 이상 막힌 게 있으면 무엇이고 어떻게 풀었는지 한 줄 기록.</li>
+      <li><strong>pi 설치</strong> — <code>curl -fsSL https://pi.dev/install.sh | sh</code> 또는 <code>npm install -g @earendil-works/pi-coding-agent</code>.</li>
+      <li><strong>인증 1개</strong> — API 키 환경변수 OR <code>/login</code> 구독.</li>
+      <li><strong>첫 실행</strong> — 터미널에서 <code>pi</code>, "hello, who are you?" 한 줄.</li>
+      <li><strong>기본 도구 확인</strong> — <code>pi -p "list files in current dir"</code> → <code>read</code>·<code>bash</code> 중 하나가 호출되는지 화면에서 확인.</li>
+      <li><strong>막힌 지점 메모</strong> — 30분 이상 막힌 게 있으면 무엇이고 어떻게 풀었는지 한 줄.</li>
     </ol>
-    <p><strong>완료 조건:</strong> 터미널에서 <code>pi</code>로 응답이 옴.</p>
+    <p><strong>완료 조건:</strong> 터미널에서 <code>pi</code>로 응답이 옴 + 기본 도구 1개 호출 확인.</p>
   </div>
 
   <div class="note-block">
@@ -408,21 +556,21 @@ pi
   <div class="verify">
     <div class="callout-title">다시 확인 · 반복참정법</div>
     <ol>
-      <li>pi 부팅 명령은 무엇인가?</li>
-      <li>본인이 연결한 API 제공자는 무엇이고, 키는 어디에 두었는가?</li>
-      <li>examples/ 중 가장 관심 가는 폴더 1개는 무엇이며, 왜 끌렸는가?</li>
+      <li>pi의 정확한 npm 패키지 이름은? (<code>@earendil-works/pi-coding-agent</code>)</li>
+      <li>플래그 없이 부팅 시 활성화되는 기본 도구 4개는? (<code>read</code>, <code>write</code>, <code>edit</code>, <code>bash</code>)</li>
+      <li>본인이 연결한 인증 방식은 API 키인가 구독인가? 구독이라면 어느 제공자인가?</li>
     </ol>
   </div>
 
   <div class="chapter-nav">
-    <a class="prev" href="#ch2"><span class="dir">← 이전</span>2. pi 4블록 + 아라 메타포</a>
+    <a class="prev" href="#ch2"><span class="dir">← 이전</span>2. pi의 4가지 커스터마이징</a>
     <a class="next" href="#ch4"><span class="dir">다음 →</span>4. Day 2 · 예제 분해</a>
   </div>
 </section>
 
 <!-- ============== CH4 (Day 2) ============== -->
 <section class="chapter" id="ch4">
-  <h2>4장. Day 2 — 예제 한 채 분해</h2>
+  <h2>4장. Day 2 — examples/ 한 채 분해</h2>
   <div class="chapter-meta">Part 2 · 7일 미션 · 1~2시간</div>
 
   <div class="dasan">
@@ -433,24 +581,39 @@ pi
 
   <h3>핵심 개념</h3>
   <p>
-    examples/ 중 본인 관심 가는 예제 1개를 고른다. 권장: <strong>research</strong>, <strong>code-review</strong>, <strong>note-summarizer</strong> 류 — 본인의 타깃 워크플로우와 가까운 것.
-    그 예제의 파일 트리를 종이에 그린다. 어느 파일이 4블록 중 어디에 해당하는지 라벨링한다.
+    pi 레포의 <code>packages/coding-agent/examples/extensions/</code>에는 30여 개의 실제 작동하는 Extension 예제가 있다. 그 중 본인 관심 워크플로우와 가까운 1개를 골라 끝까지 읽고, 한 줄을 손대본다.
   </p>
 
-  <pre><code>examples/research-bot/
-├── ext/
-│   └── web-search.ts        ← 🧩 Extension
-├── skills/
-│   └── deep-research/
-│       └── README.md        ← 🛠️ Skill
-├── prompts/
-│   └── analyst-persona.md   ← ✍️ Prompt Template
-├── themes/
-│   └── focus.json           ← 🎨 Theme
-└── package.json             ← Pi Package 매니페스트
-</code></pre>
+  <div class="fact">
+    <div class="callout-title">📗 실제 examples/extensions/ (커밋 <code>40c05f55</code> 시점, 30+ 파일)</div>
+    <p>워크샵용 대표 예제:</p>
+    <ul>
+      <li><code>hello.ts</code> — 가장 작은 hello extension (★)</li>
+      <li><code>auto-commit-on-exit.ts</code> — pi 종료 시 자동 커밋</li>
+      <li><code>git-checkpoint.ts</code> — 매 턴마다 stash 백업</li>
+      <li><code>bookmark.ts</code> — 대화 북마크</li>
+      <li><code>confirm-destructive.ts</code> — <code>rm -rf</code> 같은 위험 명령 확인 게이트</li>
+      <li><code>doom-overlay/</code> — 대기 시간 Doom 게임 (강사 시연용 ✨)</li>
+      <li><code>custom-compaction.ts</code> — 컴팩션 커스터마이징</li>
+      <li><code>handoff.ts</code> — 다른 에이전트로 핸드오프 (서브에이전트 패턴)</li>
+      <li><code>dynamic-resources/</code> · <code>commands.ts</code> · <code>event-bus.ts</code> · <code>file-trigger.ts</code> 등 다수</li>
+    </ul>
+    <p>전체 보기: <a href="https://github.com/earendil-works/pi/tree/main/packages/coding-agent/examples/extensions" target="_blank">github.com/earendil-works/pi/tree/main/packages/coding-agent/examples/extensions</a></p>
+    <div class="src">출처: ls /tmp/pi-real/packages/coding-agent/examples/extensions/ (2026-05-14)</div>
+  </div>
 
-  <p>구조가 그려졌으면 한 부품(추천: Prompt Template)을 살짝 수정한다. 톤을 바꾸거나 한 문장 추가한다. 그리고 다시 실행해서 결과 변화를 본다.</p>
+  <p>구조가 그려졌으면 한 부품(추천: <code>hello.ts</code> 또는 본인 워크플로우에 가까운 것 1개)을 살짝 수정한다. 한 줄 추가하거나 메시지를 바꾸고, 다시 실행해서 결과 변화를 본다.</p>
+
+  <div class="fact">
+    <div class="callout-title">📗 임시 로드해서 시험 (설치 없이)</div>
+    <pre><code># 한 번만 쓰고 버리는 임시 로드
+pi -e ./examples/extensions/hello.ts
+
+# git 패키지 임시
+pi -e git:github.com/user/repo</code></pre>
+    <p>워크샵에서 카탈로그 부품 시연할 때 <code>-e</code>로 임시 로드 → 설치 없이 비교 가능. 글로벌 설정 안 건드림.</p>
+    <div class="src">출처: docs/packages.md:41~46</div>
+  </div>
 
   <div class="why">
     <div class="callout-title">왜 이게 필요한가? · 여박총피법</div>
@@ -472,17 +635,17 @@ pi
   <div class="reverse">
     <div class="callout-title">반대로 생각하면? · 일반지도법</div>
     <p>
-      분해를 건너뛰면 Day 3 영혼 작성에서 막힌다. "Prompt Template이 어디에 어떻게 박혀서 호출되는지" 모르는 상태로 영혼만 쓰면, 작성은 했으나 봇이 안 부른다.
+      분해를 건너뛰면 Day 4·5에서 막힌다. Skill·Extension이 "어떤 인터페이스로 pi에 박히는지" 모른 채로 만들면 작동은 했는데 호출이 안 된다.
     </p>
   </div>
 
   <div class="practice">
     <div class="callout-title">실습 · 정과실천법</div>
     <ol>
-      <li>예제 1개 선택 (10분).</li>
-      <li>파일 트리를 종이에 그리고 4블록 라벨링 (20분).</li>
-      <li>한 번 실행해보고 결과 확인 (10분).</li>
-      <li>Prompt Template을 한 줄 수정 → 다시 실행 → 결과 비교 (20분).</li>
+      <li>위 예제 목록에서 본인 워크플로우와 가까운 1개 선택 (10분).</li>
+      <li>해당 파일을 처음부터 끝까지 읽는다 (20분). <code>pi.on(...)</code>, <code>pi.registerTool({...})</code>, <code>pi.registerCommand(...)</code> 같은 호출이 어떻게 박히는지 본다.</li>
+      <li><code>pi -e ./examples/extensions/<선택한>.ts</code>로 임시 로드 → 실제 작동 확인 (10분).</li>
+      <li>한 줄 수정 → 다시 실행 → 결과 비교 (20분).</li>
       <li>이해된 것/이해 안 된 것을 한 줄씩 적기 (10분).</li>
     </ol>
     <p><strong>완료 조건:</strong> "이 예제가 이렇게 조립된 거구나"가 머리에 그려진다.</p>
@@ -490,27 +653,27 @@ pi
 
   <div class="note-block">
     <label>📝 내 생각 쓰기 · 수사차록법</label>
-    <textarea class="note" placeholder="고른 예제 이름, 4블록 라벨링 결과, 수정 후 결과 변화 한 줄."></textarea>
+    <textarea class="note" placeholder="고른 예제 이름, 가장 흥미로웠던 줄(line), 수정 후 결과 변화 한 줄."></textarea>
   </div>
 
   <div class="verify">
     <div class="callout-title">다시 확인 · 반복참정법</div>
     <ol>
-      <li>고른 예제에서 "영혼"은 어떤 파일인가?</li>
-      <li>Skill의 README는 무엇을 정의하고 있는가? (호출 방식, 입출력, 도구)</li>
-      <li>이 예제를 본인의 타깃 워크플로우용으로 바꾸려면 어느 블록을 가장 많이 손대야 하는가?</li>
+      <li>고른 예제에서 <code>pi.</code> 시작 호출 (예: <code>pi.registerTool</code>, <code>pi.on</code>) 3개를 댈 수 있는가?</li>
+      <li><code>-e</code> 플래그와 <code>pi install</code>의 차이는?</li>
+      <li>이 예제를 본인 타깃 워크플로우용으로 바꾸려면 어느 부분을 가장 많이 손대야 하는가?</li>
     </ol>
   </div>
 
   <div class="chapter-nav">
-    <a class="prev" href="#ch3"><span class="dir">← 이전</span>3. Day 1 · 환경 세트업</a>
-    <a class="next" href="#ch5"><span class="dir">다음 →</span>5. Day 3 · 영혼 작성</a>
+    <a class="prev" href="#ch3"><span class="dir">← 이전</span>3. Day 1 · 설치 + 부팅</a>
+    <a class="next" href="#ch5"><span class="dir">다음 →</span>5. Day 3 · 영혼</a>
   </div>
 </section>
 
 <!-- ============== CH5 (Day 3) ============== -->
 <section class="chapter" id="ch5">
-  <h2>5장. Day 3 — 영혼 작성 (persona-taikan.md)</h2>
+  <h2>5장. Day 3 — 영혼 작성 (AGENTS.md + Prompt Templates)</h2>
   <div class="chapter-meta">Part 2 · 7일 미션 · 1~2시간 (이 챕터는 천천히)</div>
 
   <div class="dasan">
@@ -519,13 +682,36 @@ pi
     <div class="desc">근거 없는 것은 쓰지 않는다. 영혼은 멋 부려 쓰는 게 아니라 본인 결을 박제하는 작업이다. 본인이 안 쓰는 말은 한 단어도 들어가면 안 된다.</div>
   </div>
 
-  <h3>핵심 개념</h3>
-  <p>
-    pi의 Prompt Template은 마크다운 한 장이다. 그 장에 본인의 톤·관점·가치관·말투를 박는다. 이건 디자인 작업이 아니라 <strong>본인 인터뷰</strong>에 가깝다.
-    잘 쓴 persona.md는 다음 6개를 답한다: ① 자주 쓰는 단어, ② 싫어하는 단어, ③ 기본 답변 자세, ④ 거절·반대할 때의 방식, ⑤ 결과 형식 선호, ⑥ 사용자와의 관계.
-  </p>
+  <div class="fact" style="border-left-color: #ff7a7a;">
+    <div class="callout-title" style="color: #ff7a7a;">⚠️ v0.1 정정 — "영혼"의 실제 위치</div>
+    <p>
+      v0.1 교재는 "Prompt Template = 에이전트의 영혼"이라고 적었다. <strong>이건 잘못이다.</strong> pi 공식 문서 기준으로:
+    </p>
+    <ul>
+      <li><strong>영혼(지속적 인격·정책·컨벤션)</strong>은 <code>AGENTS.md</code> / <code>CLAUDE.md</code> (Context Files) + <code>SYSTEM.md</code>가 담당. 부팅 시 자동 로드 + 모든 응답에 영향.</li>
+      <li><strong>Prompt Template</strong>은 <code>/name</code>으로 expand되는 슬래시 커맨드형 재사용 프롬프트. 특정 작업 호출용 (예: <code>/review</code>, <code>/pr</code>). 영혼이 아니라 "자주 쓰는 마법 카드".</li>
+    </ul>
+    <p>둘 다 박는다 — 영혼은 AGENTS.md, 자주 쓰는 슬래시는 Prompt Templates.</p>
+  </div>
 
-  <pre><code># persona-taikan.md
+  <h3>영혼 1: AGENTS.md (자동 로드 컨텍스트)</h3>
+
+  <div class="fact">
+    <div class="callout-title">📗 Context Files — 자동 로드 (공식)</div>
+    <p>pi는 부팅 시 다음 위치의 <code>AGENTS.md</code> (또는 <code>CLAUDE.md</code>)를 자동 로드한다:</p>
+    <ul>
+      <li><code>~/.pi/agent/AGENTS.md</code> — 글로벌</li>
+      <li>부모 디렉토리들 (cwd부터 위로)</li>
+      <li>cwd</li>
+    </ul>
+    <p>매칭되는 모든 파일이 concat되어 시스템 컨텍스트에 들어간다. 끄려면 <code>--no-context-files</code> (<code>-nc</code>).</p>
+    <p><strong>System Prompt 자체를 갈아끼우려면</strong>: <code>.pi/SYSTEM.md</code> (프로젝트) 또는 <code>~/.pi/agent/SYSTEM.md</code> (글로벌). 추가만 하려면 <code>APPEND_SYSTEM.md</code>.</p>
+    <div class="src">출처: README.md:296~309</div>
+  </div>
+
+  <p>본인 결을 박제하는 진짜 자리는 여기다. 자주 쓰는 말 / 안 쓰는 말 / 기본 자세 / 거절 패턴 / 결과 형식 — 이건 매번 부르고 싶지 않다. 한 번 박아두고 자동으로 들어가게 한다.</p>
+
+  <pre><code># ~/.pi/agent/AGENTS.md  (또는 프로젝트 루트의 AGENTS.md)
 
 ## 누구
 타이칸의 분신 같은 에이전트. 일을 같이 하는 사이.
@@ -554,66 +740,94 @@ pi
 - 표·코드블록은 비교가 필요할 때만.
 </code></pre>
 
-  <p>참고로 익환의 <code>SOUL.md</code> 구조가 좋은 예시. 본인이 익숙한 표현을 가져와 본인 결로 다시 쓰는 것이 가장 빠르다.</p>
+  <h3>영혼 2: Prompt Templates (슬래시 커맨드 형 재사용 프롬프트)</h3>
+
+  <div class="fact">
+    <div class="callout-title">📗 Prompt Template 공식 형식</div>
+    <pre><code>&lt;!-- ~/.pi/agent/prompts/review.md --&gt;
+---
+description: Review staged git changes
+argument-hint: "[focus]"
+---
+Review the staged changes (`git diff --cached`). Focus on:
+- Bugs and logic errors
+- Security issues
+- Error handling gaps
+- Specifically: $1
+</code></pre>
+    <p>호출: <code>/review "auth flow"</code> → <code>$1</code>이 <code>"auth flow"</code>로 치환되어 expand.</p>
+    <ul>
+      <li>파일명이 명령어 — <code>review.md</code> → <code>/review</code></li>
+      <li><code>description</code>: 자동완성에 표시 (없으면 첫 줄)</li>
+      <li><code>argument-hint</code>: <code>&lt;required&gt;</code>, <code>[optional]</code></li>
+      <li>인자: <code>$1</code>, <code>$2</code>, ... · <code>$@</code> 또는 <code>$ARGUMENTS</code> (전부) · <code>${@:N}</code>, <code>${@:N:L}</code> (슬라이스)</li>
+      <li>위치: <code>~/.pi/agent/prompts/</code>, <code>.pi/prompts/</code>, 패키지, settings</li>
+    </ul>
+    <div class="src">출처: docs/prompt-templates.md</div>
+  </div>
+
+  <p>본인 자주 쓰는 작업 3~5개를 슬래시 커맨드로 박는다 — 예: <code>/review</code>, <code>/summarize</code>, <code>/journal</code>. AGENTS.md가 "어떻게 답하는가"라면, Prompt Templates는 "어떤 작업을 자주 부르는가"다.</p>
 
   <div class="why">
     <div class="callout-title">왜 이게 필요한가? · 여박총피법</div>
     <p>
       "프롬프트 잘 쓰는 법"의 한 겹 아래엔 더 중요한 게 있다. <strong>매번 같은 톤을 다시 설명하는 게 진짜 비용이다.</strong> 프롬프트 엔지니어링이라 부르는 것의 80%는 본인 결을 매번 다시 박는 일이다.
-      한 번 박아 파일에 두면 그 비용이 사라진다. 이게 "영혼을 가진다"의 실용적 의미다.
+      한 번 AGENTS.md에 박으면 그 비용이 사라진다. 그 위에 자주 쓰는 작업은 Prompt Template으로 한 번 더 박는다. 이게 "영혼을 가진다"의 실용적 의미다.
     </p>
   </div>
 
   <h3>비교로 이해하기 · 피차비대법</h3>
   <table>
-    <thead><tr><th>유형</th><th>특징</th><th>결과</th></tr></thead>
+    <thead><tr><th>유형</th><th>역할</th><th>로드 시점</th><th>호출</th></tr></thead>
     <tbody>
-      <tr><td>일반 system prompt</td><td>"전문가인 척하라" 같은 추상</td><td>누구나 비슷한 결</td></tr>
-      <tr><td>persona.md (본인 결)</td><td>본인이 실제 쓰는 표현·금지어 명시</td><td>읽어보면 누구 건지 알아봄</td></tr>
+      <tr><td>System Prompt (default)</td><td>pi 기본 동작 정의</td><td>모든 응답</td><td>자동</td></tr>
+      <tr><td><code>SYSTEM.md</code> (커스텀)</td><td>System Prompt 통째 교체</td><td>모든 응답</td><td>자동 (override)</td></tr>
+      <tr><td><strong><code>AGENTS.md</code> / <code>CLAUDE.md</code></strong></td><td><strong>본인 결·정책·컨벤션 (영혼)</strong></td><td>모든 응답</td><td>자동</td></tr>
+      <tr><td><strong>Prompt Templates</strong></td><td><strong>자주 쓰는 작업 (마법 카드)</strong></td><td>호출 시</td><td><code>/name args</code></td></tr>
     </tbody>
   </table>
 
   <div class="reverse">
     <div class="callout-title">반대로 생각하면? · 일반지도법</div>
     <p>
-      영혼 없이 능력만 만들면? 능력은 잘 작동한다. 그러나 같은 능력을 다른 LLM에 붙여도 결과가 똑같다. "내 것"이라는 감각이 안 생긴다. 가지는 AI의 본질이 빠진 채로 도구만 본인 폴더에 두는 셈.
+      AGENTS.md 없이 능력만 만들면? 능력은 잘 작동한다. 그러나 같은 능력을 다른 LLM에 붙여도 결과가 똑같다. "내 것"이라는 감각이 안 생긴다. 가지는 AI의 본질이 빠진 채로 도구만 본인 폴더에 두는 셈.
     </p>
   </div>
 
   <div class="practice">
     <div class="callout-title">실습 · 정과실천법</div>
     <ol>
-      <li><code>prompts/persona-{본인이름}.md</code> 파일 생성.</li>
-      <li>위 6개 질문을 항목으로 두고 본인 답 작성 (1~1.5시간).</li>
-      <li>최근 본인이 카톡·메모에 쓴 문장 5개를 가져와서 톤 검증 — persona.md 톤과 일치하는가?</li>
-      <li>해당 persona를 Day 2에서 분해한 예제에 끼워 넣고 한 번 호출 → 결과 톤 변화 확인.</li>
+      <li><strong>AGENTS.md 작성</strong> — <code>~/.pi/agent/AGENTS.md</code> 또는 프로젝트 루트의 <code>AGENTS.md</code>. 위 6개 섹션(누구/자주 쓰는 말/안 쓰는 말/기본 자세/거절·반대/결과 형식) (60분).</li>
+      <li><strong>최근 카톡·메모 5문장</strong>으로 톤 검증 — AGENTS.md 톤과 일치하는가? (20분).</li>
+      <li><strong>Prompt Template 1개</strong> 작성 — 본인이 가장 자주 하는 작업 1개 (예: 강의 자료 리서치 / PR 리뷰 / 일기 정리) (20분).</li>
+      <li><strong>호출 시연</strong> — <code>pi</code> 부팅 → 동일 질문을 AGENTS.md 적용 전/후로 던져보고 톤 변화 확인.</li>
     </ol>
-    <p><strong>완료 조건:</strong> 이 마크다운만 보면 "이건 타이칸 거구나"가 알아봐진다.</p>
+    <p><strong>완료 조건:</strong> AGENTS.md만 봐도 "타이칸 거구나" 알아봐지고, Prompt Template 1개가 <code>/name</code>으로 expand된다.</p>
   </div>
 
   <div class="note-block">
     <label>📝 내 생각 쓰기 · 수사차록법</label>
-    <textarea class="note" placeholder="내가 '절대 쓰지 않는 말' 5개를 적어보기. 이게 persona.md 금지어 섹션의 시작이다."></textarea>
+    <textarea class="note" placeholder="내가 '절대 쓰지 않는 말' 5개. 이게 AGENTS.md 금지어 섹션의 시작이다."></textarea>
   </div>
 
   <div class="verify">
     <div class="callout-title">다시 확인 · 반복참정법</div>
     <ol>
-      <li>본인 persona.md에서 가장 본인다운 한 문장은 무엇인가?</li>
-      <li>이 persona가 들어가기 전과 후, 같은 질문에 대한 답이 어떻게 달라졌는가?</li>
-      <li>다른 워크플로우(코드 리뷰, 리서치 등)에도 같은 영혼을 그대로 쓸 수 있는가, 따로 만들어야 하는가?</li>
+      <li>"영혼"은 어디에 박는가? — <strong>AGENTS.md / CLAUDE.md (Context Files)</strong>. Prompt Template이 아니다.</li>
+      <li>Prompt Template은 어떤 역할인가? — <strong>슬래시 커맨드형 재사용 프롬프트</strong>. 자주 쓰는 작업 단축키.</li>
+      <li>본인 AGENTS.md와 가장 본인다운 한 문장은 무엇인가?</li>
     </ol>
   </div>
 
   <div class="chapter-nav">
     <a class="prev" href="#ch4"><span class="dir">← 이전</span>4. Day 2 · 예제 분해</a>
-    <a class="next" href="#ch6"><span class="dir">다음 →</span>6. Day 4 · 능력 1개</a>
+    <a class="next" href="#ch6"><span class="dir">다음 →</span>6. Day 4 · Skill 1개</a>
   </div>
 </section>
 
 <!-- ============== CH6 (Day 4) ============== -->
 <section class="chapter" id="ch6">
-  <h2>6장. Day 4 — 능력 1개 만들기 (/skill:custom)</h2>
+  <h2>6장. Day 4 — Skill 1개 만들기 (Agent Skills 표준)</h2>
   <div class="chapter-meta">Part 2 · 7일 미션 · 1~2시간</div>
 
   <div class="dasan">
@@ -622,51 +836,89 @@ pi
     <div class="desc">쓸모를 따지고 실용에 바탕한다. 멋있어 보이는 능력 말고, 본인이 매일 부르게 될 능력 하나만 만든다. 안 부르는 능력은 만든 게 아니다.</div>
   </div>
 
-  <h3>핵심 개념</h3>
-  <p>
-    Skills는 Agent Skills 표준을 따른다. <code>/skill:이름</code>으로 호출되고, 폴더 1개로 박힌다. 폴더 안엔 README(능력 정의)와 필요한 도구가 들어간다.
-  </p>
+  <div class="fact">
+    <div class="callout-title">📗 Skill 공식 — Agent Skills 표준 준수</div>
+    <p>
+      Skill은 <a href="https://agentskills.io/specification">Agent Skills 표준</a>을 따르는 디렉토리다. pi는 시작 시 description만 system prompt에 박고, 작업 매칭 시 모델이 <code>read</code>로 <code>SKILL.md</code> 전체를 로드한다 (progressive disclosure).
+    </p>
+    <p>호출 방식 2가지:</p>
+    <ul>
+      <li><strong>명시 호출</strong> — <code>/skill:name</code></li>
+      <li><strong>자동 매칭</strong> — description 기반으로 에이전트가 알아서 로드 (모델이 항상 하진 않으니 명시 호출이 안전)</li>
+    </ul>
+    <div class="src">출처: docs/skills.md:1~71</div>
+  </div>
 
-  <pre><code>skills/lecture-research/
-├── README.md          ← 능력 정의
-├── prompts/
-│   └── intro.md       ← 능력 호출 시 들어가는 초기 프롬프트
-└── tools.json         ← 이 능력이 쓸 수 있는 도구 목록
+  <div class="fact">
+    <div class="callout-title">📗 SKILL.md 공식 형식 (frontmatter 필수)</div>
+    <pre><code>---
+name: lecture-research
+description: 강의 자료 리서치 — 주제 1개 받아서 핵심 개념 5 + 비유 + 비교표 + 참고링크 3 출력. 강의 준비할 때 부른다.
+---
+
+# Lecture Research
+
+## When to invoke
+- 강의 자료 만들 때 주제 1개를 핵심으로 분해해야 할 때
+
+## Steps
+1. 주제 분해 — 핵심 개념 5개 추출
+2. 비유 1개 선정 (학습자가 이미 아는 영역에서)
+3. 비교표 1개 작성
+4. 참고 링크 3개 (출처 명시)
+
+## Resources
+- See [references/sources.md](references/sources.md) for source rubric
 </code></pre>
+    <p><strong>frontmatter 필수 필드:</strong></p>
+    <ul>
+      <li><code>name</code> — 64자, 소문자/숫자/하이픈만, <strong>부모 디렉토리명과 일치</strong></li>
+      <li><code>description</code> — 1024자, "무엇을 하고 언제 부르는가"</li>
+    </ul>
+    <p>옵션: <code>license</code>, <code>compatibility</code>, <code>metadata</code>, <code>allowed-tools</code>, <code>disable-model-invocation</code></p>
+    <p><strong>description이 없으면 skill이 아예 로드되지 않는다.</strong></p>
+    <div class="src">출처: docs/skills.md:109~190</div>
+  </div>
 
-  <p>README.md에는 반드시 다음을 적는다:</p>
-  <ul>
-    <li><strong>능력 이름</strong> — <code>/skill:lecture-research</code></li>
-    <li><strong>언제 부르는가</strong> — "강의 자료 리서치가 필요할 때"</li>
-    <li><strong>입력</strong> — 주제 1개</li>
-    <li><strong>출력</strong> — 핵심 개념 5개 + 비유 + 비교표 + 참고링크 3개</li>
-    <li><strong>과정</strong> — 1) 주제 분해 → 2) 웹 검색 → 3) 정리 → 4) 비유 추출 → 5) 출력</li>
-    <li><strong>쓰는 도구</strong> — <code>web-search</code>, <code>obsidian-read</code></li>
-  </ul>
+  <div class="fact">
+    <div class="callout-title">📗 디렉토리 구조 (공식)</div>
+    <pre><code>~/.pi/agent/skills/lecture-research/
+├── SKILL.md          ← 필수 (frontmatter + 본문)
+├── scripts/          ← 헬퍼 스크립트 (선택)
+│   └── process.sh
+├── references/       ← on-demand 로드 문서 (선택)
+│   └── sources.md
+└── assets/
+    └── template.json
+</code></pre>
+    <p>경로는 SKILL.md 기준 상대경로. <code>read</code>가 자동으로 가능하므로 <code>See [refs](references/sources.md)</code> 식으로 링크하면 됨.</p>
+    <div class="src">출처: docs/skills.md:92~130</div>
+  </div>
 
   <div class="why">
     <div class="callout-title">왜 이게 필요한가? · 여박총피법</div>
     <p>
-      "그냥 프롬프트로 시키면 되는 거 아냐?" 한 겹 벗기면 차이가 보인다. Skill은 <strong>호출 가능한 함수</strong>다. 매번 같은 프롬프트를 다시 쓸 필요가 없고, 다른 Skill이 이 Skill을 부를 수도 있다 (조합 가능).
+      "그냥 프롬프트로 시키면 되는 거 아냐?" 한 겹 벗기면 차이가 보인다. Skill은 <strong>호출 가능한 능력</strong>이고, 무엇보다 <strong>progressive disclosure</strong>가 핵심이다. description만 system prompt에 있다가, 작업이 매칭되면 그제서야 풀 내용이 로드된다. 컨텍스트를 안 먹는다.
       Skill = 본인 워크플로우의 "동사". 동사가 모이면 본인만의 작업 언어가 생긴다.
     </p>
   </div>
 
   <h3>비교로 이해하기 · 피차비대법</h3>
   <table>
-    <thead><tr><th>구분</th><th>일반 프롬프트</th><th>Skill</th></tr></thead>
+    <thead><tr><th>구분</th><th>Prompt Template</th><th>Skill</th></tr></thead>
     <tbody>
-      <tr><td>호출</td><td>매번 다시 입력</td><td><code>/skill:이름</code> 한 줄</td></tr>
-      <tr><td>도구</td><td>매번 명시</td><td>README에 박혀있음</td></tr>
-      <tr><td>조합</td><td>한 번에 끝</td><td>다른 Skill에서 부를 수 있음</td></tr>
-      <tr><td>버전</td><td>없음</td><td>git으로 관리</td></tr>
+      <tr><td>형식</td><td><code>.md</code> 한 장</td><td>디렉토리 + <code>SKILL.md</code> + 리소스</td></tr>
+      <tr><td>호출</td><td><code>/name</code></td><td><code>/skill:name</code> (또는 자동 매칭)</td></tr>
+      <tr><td>크기</td><td>가볍게 expand</td><td>도구·스크립트·문서 묶음</td></tr>
+      <tr><td>로드</td><td>매번 전체</td><td>description만 → 매칭 시 전체 (progressive)</td></tr>
+      <tr><td>용도</td><td>같은 말 반복 줄이기</td><td>복잡한 작업 박제</td></tr>
     </tbody>
   </table>
 
   <div class="reverse">
     <div class="callout-title">반대로 생각하면? · 일반지도법</div>
     <p>
-      Skill 안 만들고 매번 프롬프트로 직접 시키면 되긴 한다. 1주 동안은 큰 차이 없다. 한 달 후 같은 작업을 30번 반복했다면, 매번 같은 설명을 30번 다시 쓴 셈이다. Skill은 그 30번을 1번으로 줄인다.
+      Skill을 안 만들고 매번 프롬프트로 직접 시키면 되긴 한다. 1주 동안은 큰 차이 없다. 한 달 후 같은 작업을 30번 반복했다면, 매번 같은 설명을 30번 다시 쓴 셈이다. Skill은 그 30번을 1번으로 줄이고, description 덕분에 모델이 알아서 부르기도 한다.
     </p>
   </div>
 
@@ -674,73 +926,119 @@ pi
     <div class="callout-title">실습 · 정과실천법</div>
     <ol>
       <li>본인 타깃 워크플로우(1장에서 정함) 기반으로 Skill 1개 정의 (10분).</li>
-      <li><code>skills/이름/README.md</code> 작성 — 위 6개 항목 모두 채우기 (40분).</li>
-      <li>Skill 호출에 필요한 도구 목록을 <code>tools.json</code>에 명시 (10분).</li>
-      <li>pi에서 <code>/skill:이름</code> 호출 → 작동 확인 (30분).</li>
+      <li><code>~/.pi/agent/skills/&lt;이름&gt;/SKILL.md</code> 생성 — frontmatter (<code>name</code>, <code>description</code>) + 본문 (When to invoke / Steps / Resources) (40분).</li>
+      <li><code>/skill:이름</code> 호출 → 작동 확인 (20분).</li>
+      <li>같은 작업을 description 매칭으로 부를 수 있는지 시험 — pi 시작하고 "강의 자료 만들어줘" 같은 자연어로 입력 (10분).</li>
       <li>안 되는 지점 메모.</li>
     </ol>
-    <p><strong>완료 조건:</strong> <code>/skill:이름</code> 호출 시 본인이 정의한 출력 구조가 실제로 생성됨.</p>
+    <p><strong>완료 조건:</strong> <code>/skill:이름</code>으로 정의한 출력 구조가 실제로 생성됨.</p>
   </div>
 
   <div class="note-block">
     <label>📝 내 생각 쓰기 · 수사차록법</label>
-    <textarea class="note" placeholder="만든 Skill 이름, 입력·출력 정의, 첫 호출 결과의 좋았던 점/부족한 점."></textarea>
+    <textarea class="note" placeholder="만든 Skill 이름, description 한 줄, 첫 호출 결과의 좋았던 점/부족한 점."></textarea>
   </div>
 
   <div class="verify">
     <div class="callout-title">다시 확인 · 반복참정법</div>
     <ol>
-      <li>본인 Skill의 입력과 출력은 무엇인가?</li>
-      <li>이 Skill을 부르는 상황을 한 줄로 설명할 수 있는가?</li>
-      <li>이 Skill이 호출하는 외부 도구는 무엇이고, 그게 Day 5에서 만들 Extension이 된다.</li>
+      <li>SKILL.md frontmatter의 필수 필드 2개는? (<code>name</code>, <code>description</code>)</li>
+      <li><code>name</code>이 만족해야 할 조건은? (64자, 소문자/숫자/하이픈, 부모 디렉토리명과 일치)</li>
+      <li>progressive disclosure가 무엇이고 왜 좋은가?</li>
     </ol>
   </div>
 
   <div class="chapter-nav">
-    <a class="prev" href="#ch5"><span class="dir">← 이전</span>5. Day 3 · 영혼 작성</a>
-    <a class="next" href="#ch7"><span class="dir">다음 →</span>7. Day 5 · 외장 1개</a>
+    <a class="prev" href="#ch5"><span class="dir">← 이전</span>5. Day 3 · 영혼</a>
+    <a class="next" href="#ch7"><span class="dir">다음 →</span>7. Day 5 · Extension 1개</a>
   </div>
 </section>
 
 <!-- ============== CH7 (Day 5) ============== -->
 <section class="chapter" id="ch7">
-  <h2>7장. Day 5 — 외장 1개 만들기 (Extension)</h2>
+  <h2>7장. Day 5 — Extension 1개 만들기 (TypeScript)</h2>
   <div class="chapter-meta">Part 2 · 7일 미션 · 1~2시간</div>
 
   <div class="dasan">
     <div class="label">🏛️ 다산 원칙</div>
     <div class="name">변례창신법 <span class="hanja">變例創新</span></div>
-    <div class="desc">전례를 참고하되 새 것을 만든다. examples/의 유사 Extension을 베껴 시작하되, 본인 워크플로우용으로 변형한다. 0에서 만들지 않는다.</div>
+    <div class="desc">전례를 참고하되 새 것을 만든다. examples/extensions/의 유사 파일을 베껴 시작하되, 본인 워크플로우용으로 변형한다. 0에서 만들지 않는다.</div>
   </div>
 
-  <h3>핵심 개념</h3>
-  <p>
-    Extension은 TypeScript 모듈이다. Day 4의 Skill이 호출할 도구를 여기에 정의한다. 가장 흔한 예: 웹 검색, 파일 읽기, API 호출, 본인 옵시디언 메모 조회.
-  </p>
+  <div class="fact">
+    <div class="callout-title">📗 Extension 공식 — pi 코어 확장</div>
+    <p>
+      Extension은 TypeScript 모듈로, <code>ExtensionAPI</code>를 받아서 <strong>tool · command · keybinding · event handler · UI</strong>를 등록한다. 부팅 시 자동 로드 (<code>~/.pi/agent/extensions/</code> 또는 <code>.pi/extensions/</code>).
+    </p>
+    <p><strong>가능한 것 (공식 docs에서):</strong></p>
+    <ul>
+      <li>커스텀 tool (또는 빌트인 tool 통째 교체)</li>
+      <li>서브 에이전트 · 플랜 모드 (pi가 빌트인으로 안 주는 것)</li>
+      <li>커스텀 컴팩션/요약</li>
+      <li>권한 게이트 · 경로 보호 (예: <code>.env</code> 쓰기 막기)</li>
+      <li>커스텀 에디터 · UI 컴포넌트</li>
+      <li>스테이터스 라인 · 헤더 · 푸터</li>
+      <li>git 체크포인팅 · 자동 커밋</li>
+      <li>SSH · 샌드박스 실행</li>
+      <li>MCP 서버 통합</li>
+      <li>pi를 Claude Code처럼 보이게 하기</li>
+      <li>대기 시간 게임 (실제로 Doom이 돔)</li>
+    </ul>
+    <div class="src">출처: docs/extensions.md, README.md:343~373</div>
+  </div>
 
-  <pre><code>// ext/obsidian-read.ts
-import { defineExtension } from "@earendil-works/pi";
-import fs from "node:fs/promises";
-import path from "node:path";
+  <div class="fact">
+    <div class="callout-title">📗 Extension Quick Start (공식 예제)</div>
+    <pre><code>import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import { Type } from "typebox";
 
-export default defineExtension({
-  name: "obsidian-read",
-  description: "타이칸 옵시디언 vault에서 노트 1개 읽기",
-  inputs: { noteName: { type: "string", required: true } },
-  async run({ noteName }) {
-    const vault = "/Users/taikhan/Documents/taikhan-vault";
-    const file = path.join(vault, noteName + ".md");
-    return await fs.readFile(file, "utf-8");
-  }
-});
-</code></pre>
+export default function (pi: ExtensionAPI) {
+  // 1) 이벤트 구독
+  pi.on("session_start", async (_event, ctx) =&gt; {
+    ctx.ui.notify("Extension loaded!", "info");
+  });
 
-  <p>이걸 Skill의 <code>tools.json</code>에서 호출하면 Skill이 옵시디언 메모를 읽어서 답한다.</p>
+  // 2) 위험 명령 게이트
+  pi.on("tool_call", async (event, ctx) =&gt; {
+    if (event.toolName === "bash" &amp;&amp; event.input.command?.includes("rm -rf")) {
+      const ok = await ctx.ui.confirm("Dangerous!", "Allow rm -rf?");
+      if (!ok) return { block: true, reason: "Blocked by user" };
+    }
+  });
+
+  // 3) 커스텀 tool 등록
+  pi.registerTool({
+    name: "greet",
+    label: "Greet",
+    description: "Greet someone by name",
+    parameters: Type.Object({
+      name: Type.String({ description: "Name to greet" }),
+    }),
+    async execute(toolCallId, params, signal, onUpdate, ctx) {
+      return {
+        content: [{ type: "text", text: `Hello, ${params.name}!` }],
+        details: {},
+      };
+    },
+  });
+
+  // 4) 슬래시 커맨드 등록
+  pi.registerCommand("hello", {
+    description: "Say hello",
+    handler: async (args, ctx) =&gt; {
+      ctx.ui.notify(`Hello ${args || "world"}!`, "info");
+    },
+  });
+}</code></pre>
+    <p><code>export default</code>는 <code>async</code>도 가능 — 부팅 전 원격 모델 목록 가져오는 등 일회성 초기화에 유용.</p>
+    <div class="src">출처: docs/extensions.md:56~100, README.md:349~357</div>
+  </div>
 
   <div class="why">
     <div class="callout-title">왜 이게 필요한가? · 여박총피법</div>
     <p>
-      외부 데이터에 닿지 못하는 능력은 절반짜리다. 본인 옵시디언, 본인 캘린더, 본인 깃 레포 — 본인 자산에 닿게 하는 통로가 Extension. 한 겹 더 벗기면, <strong>Extension이 곧 본인 시스템과 LLM을 잇는 다리</strong>다. 다리가 없으면 LLM은 본인 결을 모르는 상태로 응답한다.
+      외부 데이터에 닿지 못하는 능력은 절반짜리다. 본인 옵시디언, 본인 캘린더, 본인 깃 레포 — 본인 자산에 닿게 하는 통로가 Extension. 한 겹 더 벗기면, <strong>Extension이 곧 본인 시스템과 pi를 잇는 다리</strong>다. 다리가 없으면 pi는 본인 결을 모르는 상태로 응답한다.
+      그리고 Extension은 단지 도구 추가가 아니다 — <strong>tool_call 이벤트를 가로채서 권한 게이트, 자동 커밋, 위험 명령 차단 같은 정책도 박을 수 있다.</strong>
     </p>
   </div>
 
@@ -749,15 +1047,15 @@ export default defineExtension({
     <thead><tr><th>접근</th><th>장점</th><th>단점</th></tr></thead>
     <tbody>
       <tr><td>0에서 작성</td><td>완전 본인 결</td><td>매우 느림 · 자주 막힘</td></tr>
-      <tr><td>examples/ 베껴서 변형 (권장)</td><td>빠른 진행 · 작동 보장</td><td>처음엔 본인 결 약함</td></tr>
-      <tr><td>MCP/외부 라이브러리 가져다 쓰기</td><td>가장 빠름</td><td>본인이 내부를 모름</td></tr>
+      <tr><td>examples/extensions/ 베껴서 변형 (권장)</td><td>빠른 진행 · 작동 보장</td><td>처음엔 본인 결 약함</td></tr>
+      <tr><td>npm 패키지 설치 (<code>pi install npm:@foo/bar</code>)</td><td>가장 빠름</td><td>본인이 내부를 모름 · 보안 검토 필수</td></tr>
     </tbody>
   </table>
 
   <div class="reverse">
     <div class="callout-title">반대로 생각하면? · 일반지도법</div>
     <p>
-      Extension을 안 만들고 Skill만 만들면? Skill은 LLM 안에서만 작동한다. 본인 메모를 못 읽고, 본인 캘린더를 못 보고, 본인 파일을 못 쓴다. "가진다"가 절반에서 멈춘다.
+      Extension을 안 만들고 Skill만 만들면? Skill은 모델이 빌트인 도구(<code>read/bash/edit/write</code>)로 할 수 있는 일만 한다. 본인 옵시디언 vault에 특화된 검색, 본인 캘린더 조회, 본인 커스텀 API 호출 — 이건 Extension으로 tool을 추가해야 가능하다.
     </p>
   </div>
 
@@ -765,71 +1063,100 @@ export default defineExtension({
     <div class="callout-title">실습 · 정과실천법</div>
     <ol>
       <li>Day 4 Skill이 필요로 하는 도구 1개 선정 (10분).</li>
-      <li>examples/ 에서 비슷한 Extension 1개 찾기 (10분).</li>
-      <li>해당 파일을 본인 ext/ 폴더에 복사 후 이름·로직 수정 (40분).</li>
-      <li>Skill의 <code>tools.json</code>에 이 Extension 연결 (10분).</li>
-      <li>Skill 호출 → Extension이 실제로 데이터 가져오는지 확인 (20분).</li>
+      <li><code>examples/extensions/</code>에서 비슷한 1개 찾기 (10분) — 예: <code>hello.ts</code>, <code>commands.ts</code>, <code>dynamic-tools.ts</code>.</li>
+      <li>해당 파일을 <code>~/.pi/agent/extensions/</code>에 복사 후 이름·로직 수정 (40분). <code>pi.registerTool({...})</code>가 어떤 입력/출력을 받는지 본인 도구에 맞게 변형.</li>
+      <li><code>pi /reload</code>로 핫리로드 → tool이 등록됐는지 확인 (10분).</li>
+      <li>Skill에서 이 tool을 호출 → 외부 데이터 가져오는지 확인 (20분).</li>
     </ol>
-    <p><strong>완료 조건:</strong> Skill이 외부 데이터를 가져와서 답한다.</p>
+    <p><strong>완료 조건:</strong> 본인 Extension의 tool이 등록되고, Skill 또는 자연어 요청으로 그 tool이 호출됨.</p>
   </div>
 
   <div class="note-block">
     <label>📝 내 생각 쓰기 · 수사차록법</label>
-    <textarea class="note" placeholder="만든 Extension 이름, 베낀 예제, 가장 막혔던 한 줄(타입? 권한? 경로?)."></textarea>
+    <textarea class="note" placeholder="만든 Extension 이름, 베낀 예제, 가장 막혔던 한 줄(타입? typebox? ExtensionAPI?)."></textarea>
   </div>
 
   <div class="verify">
     <div class="callout-title">다시 확인 · 반복참정법</div>
     <ol>
-      <li>본인 Extension의 입력·출력 타입은 무엇인가?</li>
-      <li>Skill이 이 Extension을 어떻게 호출하는가? (호출 흐름을 한 줄로)</li>
-      <li>다음에 추가하고 싶은 Extension은 무엇이며, 그건 어떤 워크플로우에 쓰일 것인가?</li>
+      <li>Extension에서 가장 자주 쓰는 <code>pi.</code> 메서드 3개는? (<code>pi.registerTool</code>, <code>pi.registerCommand</code>, <code>pi.on</code>)</li>
+      <li><code>pi.on("tool_call", ...)</code>로 무엇을 할 수 있는가? (한 가지 예: 위험 명령 차단)</li>
+      <li>Extension은 <code>/reload</code>로 핫리로드되는가, 아닌가? (자동 발견 위치에 있으면 yes)</li>
     </ol>
   </div>
 
   <div class="chapter-nav">
-    <a class="prev" href="#ch6"><span class="dir">← 이전</span>6. Day 4 · 능력 1개</a>
-    <a class="next" href="#ch8"><span class="dir">다음 →</span>8. Day 6 · 통합 시운전</a>
+    <a class="prev" href="#ch6"><span class="dir">← 이전</span>6. Day 4 · Skill 1개</a>
+    <a class="next" href="#ch8"><span class="dir">다음 →</span>8. Day 6 · Pi Package 묶기</a>
   </div>
 </section>
 
 <!-- ============== CH8 (Day 6) ============== -->
 <section class="chapter" id="ch8">
-  <h2>8장. Day 6 — 통합 + 시운전</h2>
+  <h2>8장. Day 6 — Pi Package로 묶기 + 시운전</h2>
   <div class="chapter-meta">Part 2 · 7일 미션 · 1~2시간</div>
 
   <div class="dasan">
     <div class="label">🏛️ 다산 원칙</div>
     <div class="name">반복참정법 <span class="hanja">反覆參訂</span></div>
-    <div class="desc">보내기 전에 한 번 더 검토. 4블록을 한 채로 묶는 단계는 가장 자주 실수하는 단계다. 실패가 아니라 검토 부족.</div>
+    <div class="desc">보내기 전에 한 번 더 검토. 4가지를 한 패키지로 묶는 단계는 가장 자주 실수하는 단계다. 실패가 아니라 검토 부족.</div>
   </div>
 
   <h3>핵심 개념</h3>
   <p>
-    Persona + Skill + Extension + (Theme은 패스 가능) — 이 3블록을 <code>package.json</code>의 <code>pi</code> 매니페스트로 묶어 한 채로 만든다. 그리고 본인 워크플로우에서 실제로 한 사이클 돌려본다.
+    AGENTS.md + Prompt Templates + Skills + Extensions (Themes는 선택) — Day 3~5에 만든 것을 <strong>하나의 Pi Package</strong>로 묶어 본인 워크플로우에 박는다. 그리고 실제로 한 사이클 돌려본다.
   </p>
 
-  <pre><code>{
-  "name": "@taikhan/research-bot",
+  <div class="fact">
+    <div class="callout-title">📗 Pi Package — 실제 작동하는 매니페스트 (공식 형태)</div>
+    <pre><code>{
+  "name": "taikhan-research-bot",
   "version": "0.1.0",
+  "description": "강의 자료 리서치 하네스",
+  "keywords": ["pi-package"],
   "pi": {
-    "extensions": ["./ext/obsidian-read.ts", "./ext/web-search.ts"],
-    "skills": ["./skills/lecture-research"],
-    "prompts": ["./prompts/persona-taikan.md"]
+    "extensions": ["./extensions"],
+    "skills": ["./skills"],
+    "prompts": ["./prompts"],
+    "themes": ["./themes"]
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*",
+    "@earendil-works/pi-ai": "*",
+    "@earendil-works/pi-agent-core": "*",
+    "@earendil-works/pi-tui": "*",
+    "typebox": "*"
   }
 }</code></pre>
+    <p>핵심 포인트:</p>
+    <ul>
+      <li><strong><code>keywords: ["pi-package"]</code> 필수</strong> — 빠뜨리면 갤러리/검색에서 안 보임.</li>
+      <li><strong>값은 디렉토리</strong> — <code>./extensions</code>, <code>./skills</code> 식. 글로브·<code>!exclude</code> 지원.</li>
+      <li><strong>pi 코어 패키지는 <code>peerDependencies</code></strong> — pi가 번들로 제공하므로 본인이 다시 번들하면 안 됨.</li>
+      <li><strong>매니페스트 없어도 됨</strong> — 위 4개 디렉토리만 있으면 auto-discover.</li>
+    </ul>
+    <div class="src">출처: docs/packages.md:111~166</div>
+  </div>
 
-  <pre><code># 부팅
-pi --package .
+  <div class="fact">
+    <div class="callout-title">📗 패키지 부팅·호출</div>
+    <pre><code># 1) 로컬 패키지 설치 (워크스페이스에 ~/.pi/agent/settings.json 등록)
+pi install /path/to/taikhan-research-bot
 
-# 호출
-/skill:lecture-research "다산 50법으로 본 강의 설계"
-</code></pre>
+# 2) 또는 임시 로드만 (설치 안 하고 1회용)
+pi -e /path/to/taikhan-research-bot
+
+# 3) 부팅 후 호출
+pi
+/skill:lecture-research "다산 50법으로 본 강의 설계"</code></pre>
+    <p>설치 위치: 글로벌은 <code>~/.pi/agent/</code>, 프로젝트는 <code>-l</code> 플래그로 <code>.pi/</code>에. git 패키지는 <code>~/.pi/agent/git/&lt;host&gt;/&lt;path&gt;</code>.</p>
+    <div class="src">출처: docs/packages.md:18~46, 86~92</div>
+  </div>
 
   <div class="why">
     <div class="callout-title">왜 이게 필요한가? · 여박총피법</div>
     <p>
-      Day 1~5까지는 부품 만들기였다. Day 6은 <strong>본인 실제 워크에 박는 단계</strong>다. 한 번이라도 실제 일에 쓰지 않은 도구는 도구가 아니다. 베타테스트가 아니라 본인이 첫 사용자.
+      Day 1~5까지는 부품 만들기였다. Day 6은 <strong>본인 실제 워크에 박는 단계</strong>다. 한 번이라도 실제 일에 쓰지 않은 도구는 도구가 아니다. 베타테스트가 아니라 본인이 첫 사용자. 그리고 패키지로 묶어두면 본인 다른 머신에서도 한 명령으로 깔린다 — 이게 "이동성" 약속의 실체.
     </p>
   </div>
 
@@ -837,28 +1164,30 @@ pi --package .
   <table>
     <thead><tr><th>단계</th><th>해야 할 일</th><th>흔한 실패</th></tr></thead>
     <tbody>
-      <tr><td>1. 부팅</td><td>패키지 인식</td><td>경로 오타 · 매니페스트 오류</td></tr>
-      <tr><td>2. 호출</td><td><code>/skill:이름</code> 응답</td><td>Skill README가 LLM에 안 들어감</td></tr>
-      <tr><td>3. 도구 사용</td><td>Extension이 실행됨</td><td>API 키 · 권한</td></tr>
-      <tr><td>4. 결과</td><td>본인 톤으로 답이 옴</td><td>persona가 안 박혔거나 형식이 다름</td></tr>
+      <tr><td>1. 매니페스트</td><td><code>package.json</code>에 <code>pi</code> + <code>keywords</code></td><td><code>keywords</code> 누락 · 경로 오타</td></tr>
+      <tr><td>2. 설치/로드</td><td><code>pi install</code> 또는 <code>-e</code></td><td>의존성 install 실패 · peerDependencies 누락</td></tr>
+      <tr><td>3. 부팅 인식</td><td>스타트업 헤더에서 skill·prompt·extension 로드 확인</td><td>경로 부정확 · SKILL.md frontmatter 누락</td></tr>
+      <tr><td>4. 호출</td><td><code>/skill:이름</code> 작동</td><td>description 매칭 안 됨</td></tr>
+      <tr><td>5. 도구 사용</td><td>Extension이 실행됨</td><td>API 키 · 권한 · TypeScript 타입 에러</td></tr>
+      <tr><td>6. 결과 톤</td><td>AGENTS.md 톤이 박혀있음</td><td>AGENTS.md 위치 잘못 (자동 로드 위치 아님)</td></tr>
     </tbody>
   </table>
 
   <div class="reverse">
     <div class="callout-title">반대로 생각하면? · 일반지도법</div>
     <p>
-      통합 단계 없이 부품만 만들고 끝내면? 워크샵에서 보여줄 게 "조각들" 뿐이고 "작동하는 한 채"가 없다. 강사 시연이 안 된다. 본인이 매일 부를 일도 없다.
+      Pi Package로 안 묶고 부품만 흩어두면? 워크샵에서 보여줄 게 "조각들"뿐이고 "작동하는 한 채"가 없다. 강사 시연이 안 된다. 본인이 매일 부를 일도 없다. 그리고 다른 머신/팀원과 공유 불가.
     </p>
   </div>
 
   <div class="practice">
     <div class="callout-title">실습 · 정과실천법</div>
     <ol>
-      <li><code>package.json</code>에 <code>pi</code> 매니페스트 작성 (15분).</li>
-      <li>패키지로 부팅 (15분).</li>
+      <li>본인 워크플로우 디렉토리 생성 후 <code>package.json</code>에 <code>pi</code> 매니페스트 + <code>keywords: ["pi-package"]</code> (15분).</li>
+      <li><code>extensions/</code>, <code>skills/</code>, <code>prompts/</code> 디렉토리에 Day 3~5 산출물 배치 (15분).</li>
+      <li><code>pi install ./</code>로 설치 → 스타트업 헤더에서 로드 확인 (10분).</li>
       <li>본인 실제 워크 1건으로 호출 (예: 오늘 강의 자료 리서치) (30분).</li>
-      <li>안 되는 부분 메모 → 가장 큰 1개만 골라 수정 (30분).</li>
-      <li>한 사이클이 끝까지 돌아가는지 확인.</li>
+      <li>안 되는 부분 메모 → 가장 큰 1개만 골라 수정 → 다시 한 사이클.</li>
     </ol>
     <p><strong>완료 조건:</strong> 한 명령으로 부팅 + 실제 작업 한 사이클 완료.</p>
   </div>
@@ -872,20 +1201,20 @@ pi --package .
     <div class="callout-title">다시 확인 · 반복참정법</div>
     <ol>
       <li>한 사이클이 끝까지 돌았는가? 어디서 멈췄다면 어디서?</li>
-      <li>출력 결과가 본인 결과 일치하는가? 다르면 어느 블록을 손봐야 하는가?</li>
-      <li>다음 사이클에 가장 먼저 수정할 한 가지는 무엇인가?</li>
+      <li>출력 결과가 AGENTS.md 톤과 일치하는가? 다르면 어느 자리를 손봐야 하는가?</li>
+      <li>Pi Package <code>keywords</code> 필드에 들어가야 하는 정확한 값은? (<code>"pi-package"</code>)</li>
     </ol>
   </div>
 
   <div class="chapter-nav">
-    <a class="prev" href="#ch7"><span class="dir">← 이전</span>7. Day 5 · 외장 1개</a>
+    <a class="prev" href="#ch7"><span class="dir">← 이전</span>7. Day 5 · Extension 1개</a>
     <a class="next" href="#ch9"><span class="dir">다음 →</span>9. Day 7 · 회고 + 데모</a>
   </div>
 </section>
 
 <!-- ============== CH9 (Day 7) ============== -->
 <section class="chapter" id="ch9">
-  <h2>9장. Day 7 — 회고 + 워크샵 시연용 다듬기</h2>
+  <h2>9장. Day 7 — 회고 + 5분 데모 다듬기</h2>
   <div class="chapter-meta">Part 2 · 7일 미션 · 1~2시간</div>
 
   <div class="dasan">
@@ -916,11 +1245,11 @@ pi --package .
   <table>
     <thead><tr><th>구간</th><th>시간</th><th>보여줄 것</th></tr></thead>
     <tbody>
-      <tr><td>0:00~0:30</td><td>30초</td><td>persona.md 1장 펴서 영혼 보여주기</td></tr>
-      <tr><td>0:30~1:30</td><td>1분</td><td>Skill README 펴서 능력 정의 보여주기</td></tr>
-      <tr><td>1:30~2:30</td><td>1분</td><td>Extension 코드 한 줄 보여주기</td></tr>
+      <tr><td>0:00~0:30</td><td>30초</td><td>AGENTS.md 펴서 "이게 영혼" 보여주기 (Prompt Template 아니다)</td></tr>
+      <tr><td>0:30~1:30</td><td>1분</td><td>SKILL.md frontmatter 펴서 능력 정의 보여주기</td></tr>
+      <tr><td>1:30~2:30</td><td>1분</td><td>Extension TypeScript 한 줄 (<code>pi.registerTool({...})</code>) 보여주기</td></tr>
       <tr><td>2:30~4:30</td><td>2분</td><td><code>/skill:이름</code> 호출 → 실제 결과 시연</td></tr>
-      <tr><td>4:30~5:00</td><td>30초</td><td>"이걸 오늘 4시간 안에 같이 만들어요" 멘트</td></tr>
+      <tr><td>4:30~5:00</td><td>30초</td><td>"이걸 오늘 4시간 안에 같이 만들어요" 멘트 + Pi Package 매니페스트 한 컷</td></tr>
     </tbody>
   </table>
 
@@ -957,7 +1286,7 @@ pi --package .
   </div>
 
   <div class="chapter-nav">
-    <a class="prev" href="#ch8"><span class="dir">← 이전</span>8. Day 6 · 통합 시운전</a>
+    <a class="prev" href="#ch8"><span class="dir">← 이전</span>8. Day 6 · Pi Package 묶기</a>
     <a class="next" href="#ch10"><span class="dir">다음 →</span>10. 워크샵 디자인 결정</a>
   </div>
 </section>
@@ -978,23 +1307,34 @@ pi --package .
     <thead><tr><th>Q</th><th>주제</th><th>결정</th><th>이유</th></tr></thead>
     <tbody>
       <tr><td>Q1</td><td>타깃</td><td>코딩 좀 하는 기획자/PM/개발자 (<strong>builder</strong>)</td><td>n8n·Make·클로드 코드 경험 있음</td></tr>
-      <tr><td>Q2</td><td>핵심 결과물</td><td>본인 워크플로우에 박힌 <strong>자동화 하네스 한 채</strong></td><td>캐릭터보다 조립 무게중심</td></tr>
+      <tr><td>Q2</td><td>핵심 결과물</td><td>본인 워크플로우에 박힌 <strong>Pi Package 한 채</strong></td><td>캐릭터보다 조립 무게중심</td></tr>
       <tr><td>Q3</td><td>운영 모델</td><td>완전 자유 + 코치형 (<strong>모듈러</strong>)</td><td>사전 카탈로그에서 골라 조립</td></tr>
       <tr><td>Q4</td><td>운영 모드</td><td><strong>파일럿 1회차</strong></td><td>학습·후기 확보 우선</td></tr>
-      <tr><td>Q5</td><td>정체성</td><td>아라(하드웨어) × 소설가(영혼)</td><td>"내 것을 가진다"의 소유 감각</td></tr>
+      <tr><td>Q5</td><td>정체성</td><td>모듈러 하드웨어 비유 × 본인 결 박제 (강의용 메타포)</td><td>"내 것을 가진다"의 소유 감각</td></tr>
       <tr><td>Q6</td><td>학습 여정</td><td><strong>B 패턴 — 결과물 우선</strong></td><td>30분 만에 미니 하네스 → 분해 → 커스터마이징</td></tr>
     </tbody>
   </table>
 
   <h3>컨셉 한 줄</h3>
   <blockquote>
-    "빌려 쓰는 AI에서, 가지는 AI로." — 프로젝트 아라처럼 분해/조립되는 나만의 AI. 부품은 카탈로그에서 고르고, 영혼은 직접 쓴다.
+    "빌려 쓰는 AI에서, 가지는 AI로." — 분해/조립되는 나만의 코딩 하네스. 부품은 카탈로그에서 고르고, 결은 직접 박는다 (AGENTS.md).
   </blockquote>
+
+  <div class="fact">
+    <div class="callout-title">📗 pi 철학 = 워크샵 약속</div>
+    <p>pi 공식 한 줄과 워크샵 한 줄이 정렬되어 있다 — 강사가 진심으로 말할 수 있는 근거.</p>
+    <ul>
+      <li><strong>pi 공식</strong>: <em>"Adapt pi to your workflows, not the other way around."</em></li>
+      <li><strong>워크샵</strong>: "빌려 쓰는 AI에서, 가지는 AI로."</li>
+      <li><strong>openclaw 참조</strong>: pi README에 "See <a href="https://github.com/openclaw/openclaw">openclaw/openclaw</a> for a real-world SDK integration"으로 명시 — 타이칸 본인 프로젝트가 pi SDK의 공식 레퍼런스로 인용됨. 워크샵에서 강사 신뢰 자산.</li>
+    </ul>
+    <div class="src">출처: pi/packages/coding-agent/README.md:20, 24</div>
+  </div>
 
   <div class="why">
     <div class="callout-title">왜 이게 필요한가? · 여박총피법</div>
     <p>
-      pi 철학과 워크샵 약속이 정확히 일치한다. pi: "Adapt pi to your workflows, not the other way around." 워크샵: "빌려 쓰는 AI에서, 가지는 AI로." 도구와 약속이 같은 결이면 마케팅이 거짓말이 안 된다. 한 겹 더: 같은 결이라야 강사가 진심으로 말할 수 있다.
+      pi 철학과 워크샵 약속이 정확히 일치한다. 도구와 약속이 같은 결이면 마케팅이 거짓말이 안 된다. 한 겹 더: 같은 결이라야 강사가 진심으로 말할 수 있다. 더 깊이: pi README가 openclaw를 인용 — 강사의 작업이 도구 만든 사람에게 인정받았다는 객관적 증거.
     </p>
   </div>
 
@@ -1053,28 +1393,29 @@ pi --package .
   <table>
     <thead><tr><th>단계</th><th>시간</th><th>구간</th><th>활동</th></tr></thead>
     <tbody>
-      <tr><td>01. 컨셉 한 컷</td><td>15분</td><td>13:00~13:15</td><td>"오늘 만들 것의 정의" — 빌려/가지는 AI, 4블록</td></tr>
-      <tr><td>02. 미니 하네스 부팅</td><td>30분</td><td>13:15~13:45</td><td>카탈로그에서 부품 골라 30분 만에 작동</td></tr>
-      <tr><td>03. 분해 분석</td><td>45분</td><td>13:45~14:30</td><td>강사 시연 + 4블록 라벨링 실습</td></tr>
+      <tr><td>01. 컨셉 한 컷</td><td>15분</td><td>13:00~13:15</td><td>"오늘 만들 것의 정의" — 빌려/가지는 AI, pi의 4가지 (Prompt/Skill/Ext/Theme)</td></tr>
+      <tr><td>02. 미니 하네스 부팅</td><td>30분</td><td>13:15~13:45</td><td>카탈로그 부품 + AGENTS.md 1장으로 30분 만에 작동</td></tr>
+      <tr><td>03. 분해 분석</td><td>45분</td><td>13:45~14:30</td><td>강사 시연 + Pi Package 매니페스트 라벨링 실습</td></tr>
       <tr><td>휴식</td><td>10분</td><td>14:30~14:40</td><td>—</td></tr>
-      <tr><td>04. 커스터마이징</td><td>120분</td><td>14:40~16:40</td><td>본인 워크플로우용으로 변형 · 코치 순회</td></tr>
+      <tr><td>04. 커스터마이징</td><td>120분</td><td>14:40~16:40</td><td>본인 AGENTS.md + Skill 1개 작성 · 코치 순회</td></tr>
       <tr><td>05. 시연 + 회고</td><td>20분</td><td>16:40~17:00</td><td>참가자 봇 1분씩 시연 + 다음 액션</td></tr>
     </tbody>
   </table>
 
   <h3>4시간 압축으로 인한 의도된 제외</h3>
   <ul>
-    <li>🎨 <strong>Themes</strong> — 워크샵 후 자습 권장.</li>
-    <li>📦 <strong>Pi Package 번들링</strong> — 워크샵 후 자습 권장.</li>
+    <li>🎨 <strong>Themes</strong> — 워크샵 후 자습 권장 (작동에 영향 없음).</li>
+    <li>🧩 <strong>Extension 작성</strong> — 시연만, 작성은 자습. TypeScript + typebox 학습 곡선이 있어 4시간에 안 들어감.</li>
+    <li>📦 <strong>Pi Package npm publish · git release</strong> — 자습.</li>
     <li>🍱 <strong>점심</strong> — 없음. 10분 휴식만.</li>
     <li>📘 <strong>AI/에이전트 기초</strong> — 안 함. 타깃(builder)의 사전 지식으로 가정.</li>
   </ul>
-  <p>핵심 (영혼 + 능력)에 집중. 외장·번들링·기초는 본인이 채워옴.</p>
+  <p>핵심 (AGENTS.md + Skill)에 집중. Extension·Theme·번들링·기초는 본인이 채워옴.</p>
 
   <div class="why">
     <div class="callout-title">왜 이게 필요한가? · 여박총피법</div>
     <p>
-      "빼면 안 되는 거 아니야?"의 한 겹 아래엔 더 큰 함정이 있다. 4시간 안에 모든 걸 다 다루면 결국 어느 것도 본인 손으로 못 만든다. <strong>덜어내는 게 워크샵 디자인의 본체</strong>다. Themes는 작동에 영향 없고, 패키징은 만들고 나서 한 번이면 끝. 진짜 가르칠 것은 영혼과 능력.
+      "빼면 안 되는 거 아니야?"의 한 겹 아래엔 더 큰 함정이 있다. 4시간 안에 모든 걸 다 다루면 결국 어느 것도 본인 손으로 못 만든다. <strong>덜어내는 게 워크샵 디자인의 본체</strong>다. Extension은 TypeScript 학습이 필요하고, Theme은 작동에 영향 없고, 패키징은 만들고 나서 한 번이면 끝. 진짜 가르칠 것은 AGENTS.md(영혼)와 Skill(능력).
     </p>
   </div>
 
@@ -1085,6 +1426,7 @@ pi --package .
     <li>☐ 터미널을 열어본 적 있다</li>
     <li>☐ GitHub 계정이 있다</li>
     <li>☐ Node.js/npm 한 번이라도 설치해봤다</li>
+    <li>☐ 마크다운으로 메모/문서 작성해봤다</li>
   </ul>
   <p>체크 안 되는 항목 <strong>2개 이상 → 다음 시즌</strong> 또는 사전 자료로 안내.</p>
 
@@ -1114,8 +1456,8 @@ pi --package .
     <div class="callout-title">다시 확인 · 반복참정법</div>
     <ol>
       <li>4시간 중 가장 긴 단계는 무엇이고 왜 그렇게 길게 잡았나?</li>
-      <li>사전 체크 4개 중 어느 것이 가장 강하게 거르는 필터인가?</li>
-      <li>Themes·Package를 워크샵에서 뺀 이유를 한 줄로 댈 수 있는가?</li>
+      <li>사전 체크 5개 중 어느 것이 가장 강하게 거르는 필터인가?</li>
+      <li>Extension·Theme·Package npm publish를 워크샵에서 뺀 이유를 한 줄로 댈 수 있는가?</li>
     </ol>
   </div>
 
@@ -1127,48 +1469,59 @@ pi --package .
 
 <!-- ============== CH12 (카탈로그) ============== -->
 <section class="chapter" id="ch12">
-  <h2>12장. 모듈 카탈로그 (v0.1)</h2>
+  <h2>12장. 모듈 카탈로그 (v0.1 → v0.2 갱신 절차)</h2>
   <div class="chapter-meta">Part 3 · 워크샵 펼치기</div>
 
   <div class="dasan">
     <div class="label">🏛️ 다산 원칙</div>
     <div class="name">취선논단법 <span class="hanja">取善論斷</span></div>
-    <div class="desc">좋은 것을 가려뽑아 남김없이 검토. 카탈로그의 부품은 다 모은 게 아니라 검증된 것만 모은 것이어야 한다.</div>
+    <div class="desc">좋은 것을 가려뽑아 남김없이 검토. 카탈로그의 부품은 다 모은 게 아니라 검증된 것만 모은 것이어야 한다. 무징불신법 — 강사가 직접 작동시켜본 것만 카탈로그에 들어간다.</div>
   </div>
 
   <h3>핵심 개념</h3>
   <p>
-    참가자가 "백지 자유"가 아니라 "카탈로그에서 골라 조립"하는 운영을 위해 <strong>모듈 카탈로그 v0.1 시안 21개 부품</strong>이 준비되어 있다. 이 카탈로그는 1주 학습 후 Day 7 회고에서 v0.2로 갱신된다 — 작동 안 한 부품 빼고, 새로 발견한 것 추가.
+    참가자가 "백지 자유"가 아니라 "카탈로그에서 골라 조립"하는 운영을 위해 <strong>모듈 카탈로그</strong>가 준비된다. 카탈로그는 1주 학습 후 Day 7 회고에서 갱신된다 — 작동 안 한 부품 빼고, 새로 발견한 것 추가.
   </p>
 
-  <p>본 교재 작성 시점에 카탈로그의 21개 부품 명세는 별도 문서로 관리 중(워크샵 디자인 마스터 노트). 여기서는 카탈로그 운영 원칙만 박는다.</p>
+  <div class="fact">
+    <div class="callout-title">📗 카탈로그 부품의 1차 자료 원천</div>
+    <p>모든 부품은 다음 3곳 중 하나에서 출처가 검증된 것만 들어간다:</p>
+    <ol>
+      <li><a href="https://github.com/earendil-works/pi/tree/main/packages/coding-agent/examples/extensions">pi/examples/extensions/</a> — 공식 예제 (강사가 임시 로드로 한 번 이상 작동 확인)</li>
+      <li><a href="https://www.npmjs.com/search?q=keywords%3Api-package">npmjs.com (pi-package keyword)</a> — 커뮤니티 패키지</li>
+      <li>강사 자작 (소스 공개 + 라이선스 명시)</li>
+    </ol>
+    <p>출처 안 밝혀진 부품은 카탈로그에 넣지 않는다 — 무징불신법.</p>
+  </div>
 
   <h3>카탈로그 운영 원칙</h3>
   <table>
     <thead><tr><th>원칙</th><th>의미</th><th>위반 시</th></tr></thead>
     <tbody>
-      <tr><td>강사 검증 통과</td><td>강사가 직접 한 번 이상 작동시킨 것만 포함</td><td>워크샵 중 작동 안 함 → 흐름 깨짐</td></tr>
-      <tr><td>4블록 매핑</td><td>모든 부품은 4블록 중 어디 속하는지 명시</td><td>참가자가 어디 끼울지 모름</td></tr>
+      <tr><td>1차 자료 출처</td><td>공식 예제 / npm pi-package / 강사 자작 중 하나로 명시</td><td>워크샵 중 작동 안 함 → 흐름 깨짐</td></tr>
+      <tr><td>4가지 매핑</td><td>Prompt Templates / Skills / Extensions / Themes 중 어디 속하는지 명시</td><td>참가자가 어디 끼울지 모름</td></tr>
       <tr><td>1줄 설명</td><td>부품마다 "언제 쓰나" 한 줄</td><td>고를 때 시간 잡아먹음</td></tr>
       <tr><td>난이도 표시</td><td>★ / ★★ / ★★★</td><td>참가자 수준 맞춤 안 됨</td></tr>
       <tr><td>유사 추천</td><td>"A 부품 못 쓰면 B 부품 대안"</td><td>막힌 사람 흐름 멈춤</td></tr>
+      <tr><td>강사 검증</td><td>워크샵 전에 강사가 임시 로드 (<code>-e</code>)로 한 번 작동시킴</td><td>현장에서 처음 돌리다 실패</td></tr>
     </tbody>
   </table>
 
-  <h3>추천 미니 하네스 — research-bot</h3>
-  <p>30분 만에 작동하는 02단계용 미니 하네스. 카탈로그에서 다음 4부품으로 조립:</p>
+  <h3>02단계 추천 미니 하네스 — research-bot</h3>
+  <p>30분 만에 작동하는 02단계용 미니 하네스 예시. 카탈로그에서 다음 부품 조합 (실제 부품 명세는 카탈로그 문서 별도 관리):</p>
   <ul>
-    <li>🧩 <code>web-search</code> Extension (★)</li>
-    <li>🛠️ <code>deep-research</code> Skill (★★)</li>
-    <li>✍️ <code>analyst-persona</code> Prompt Template (★)</li>
-    <li>🎨 <code>focus-dark</code> Theme (선택 · ★)</li>
+    <li>✍️ <code>analyst-persona</code> Prompt Template 또는 <code>AGENTS.md</code> 1장 (★)</li>
+    <li>🛠️ <code>research</code> Skill (★★) — Agent Skills 표준 SKILL.md</li>
+    <li>🧩 <code>web-search</code> Extension (★★) — 공식 예제 기반 또는 npm 패키지</li>
+    <li>🎨 (Theme은 선택)</li>
   </ul>
-  <p>이 한 채가 워크샵 02단계 부팅 시연 + 03단계 분해 분석의 교재가 된다.</p>
+  <p>이 한 채가 워크샵 02단계 부팅 시연 + 03단계 분해 분석의 교재가 된다. <strong>강사가 사전에 임시 로드 + 호출 한 사이클 완주를 확인.</strong></p>
 
   <div class="why">
     <div class="callout-title">왜 이게 필요한가? · 여박총피법</div>
     <p>
       백지 자유 운영의 한 겹 아래엔 진짜 비용이 있다. <strong>고르는 데 1시간, 만드는 데 30분.</strong> 카탈로그는 "고르는 시간"을 0에 가깝게 만든다. 자유의 본질은 선택지 무한이 아니라 결정 부담이 적은 것이다.
+      그리고 카탈로그 부품을 1차 자료(공식 예제, npm pi-package, 강사 자작) 출처로 제한하는 건 무징불신법의 적용 — 검증 안 된 부품으로 워크샵 흐름 무너뜨리지 않는다.
     </p>
   </div>
 
@@ -1177,7 +1530,7 @@ pi --package .
     <thead><tr><th>운영</th><th>장점</th><th>단점</th></tr></thead>
     <tbody>
       <tr><td>백지 자유</td><td>완전한 본인 결</td><td>대부분 고르다 끝남 · 4시간 부족</td></tr>
-      <tr><td><strong>카탈로그 + 코치 (이 워크샵)</strong></td><td>30분에 부팅 · 2시간 커스터마이징 확보</td><td>강사가 카탈로그 준비 비용 큼</td></tr>
+      <tr><td><strong>카탈로그 + 코치 (이 워크샵)</strong></td><td>30분에 부팅 · 2시간 커스터마이징 확보</td><td>강사가 카탈로그 검증 비용 큼</td></tr>
       <tr><td>완전 정해진 코스</td><td>운영 쉬움</td><td>"내 것" 감각 안 생김</td></tr>
     </tbody>
   </table>
@@ -1193,10 +1546,11 @@ pi --package .
     <div class="callout-title">실습 · 정과실천법</div>
     <ol>
       <li>Day 7 회고 시점에 카탈로그 v0.1을 펴서 부품별로 ✅/❌/➕ 표시 (30분).</li>
-      <li>카탈로그 v0.2 작성 — 위 운영 원칙 5개 모두 충족하는지 검증 (60분).</li>
-      <li>research-bot 미니 하네스의 4부품이 v0.2에 그대로 살아있는지 확인.</li>
+      <li>카탈로그 v0.2 작성 — 위 운영 원칙 6개 모두 충족하는지 검증 (60분). <strong>1차 자료 출처 명시 필수.</strong></li>
+      <li>research-bot 미니 하네스의 부품 조합이 v0.2에 그대로 살아있는지 확인.</li>
+      <li>각 부품을 <code>pi -e</code>로 임시 로드해서 강사가 한 번씩 작동 확인.</li>
     </ol>
-    <p><strong>완료 조건:</strong> 카탈로그 v0.2가 워크샵 사전 자료로 배포 가능한 상태.</p>
+    <p><strong>완료 조건:</strong> 카탈로그 v0.2가 워크샵 사전 자료로 배포 가능한 상태 + 모든 부품에 출처 + 강사 검증 표시.</p>
   </div>
 
   <div class="note-block">
@@ -1208,8 +1562,8 @@ pi --package .
     <div class="callout-title">다시 확인 · 반복참정법</div>
     <ol>
       <li>카탈로그의 부품 1개가 워크샵 중 안 작동하면 어떻게 대처하는가?</li>
-      <li>research-bot 미니 하네스의 4부품 중 가장 약한 부품은 무엇인가?</li>
-      <li>다음 시즌(v0.3) 카탈로그에 추가하고 싶은 부품 카테고리는?</li>
+      <li>research-bot 미니 하네스의 부품 중 가장 약한 부품은 무엇인가?</li>
+      <li>모든 부품에 1차 자료 출처가 명시되어 있는가? (공식 예제 / npm pi-package / 강사 자작 중 하나)</li>
     </ol>
   </div>
 
@@ -1230,29 +1584,31 @@ pi --package .
     <thead><tr><th>챕터</th><th>주제</th><th>대표 원칙</th><th>핵심 적용</th></tr></thead>
     <tbody>
       <tr><td>1</td><td>컨셉</td><td>본의본령법</td><td>핵심 한 줄을 먼저 박는다</td></tr>
-      <tr><td>2</td><td>4블록</td><td>휘분류취법</td><td>분류해야 조립할 수 있다</td></tr>
-      <tr><td>3</td><td>Day 1 환경</td><td>축기견초법</td><td>기초가 흔들리면 다 흔들린다</td></tr>
+      <tr><td>2</td><td>4가지 커스터마이징</td><td>휘분류취법</td><td>공식 이름·역할로 분류해야 조립할 수 있다</td></tr>
+      <tr><td>3</td><td>Day 1 설치</td><td>축기견초법</td><td>기초가 흔들리면 다 흔들린다</td></tr>
       <tr><td>4</td><td>Day 2 분해</td><td>여박총피법</td><td>한 채를 끝까지 벗긴다</td></tr>
-      <tr><td>5</td><td>Day 3 영혼</td><td>무징불신법</td><td>본인이 안 쓰는 말은 한 단어도 금지</td></tr>
-      <tr><td>6</td><td>Day 4 능력</td><td>강구실용법</td><td>매일 부르게 될 능력만 만든다</td></tr>
-      <tr><td>7</td><td>Day 5 외장</td><td>변례창신법</td><td>예제 베껴 변형, 0에서 만들지 않는다</td></tr>
-      <tr><td>8</td><td>Day 6 통합</td><td>반복참정법</td><td>붙이기 전 한 번 더 검토</td></tr>
+      <tr><td>5</td><td>Day 3 영혼</td><td>무징불신법</td><td>본인이 안 쓰는 말은 한 단어도 금지 (AGENTS.md)</td></tr>
+      <tr><td>6</td><td>Day 4 Skill</td><td>강구실용법</td><td>매일 부르게 될 능력만 만든다</td></tr>
+      <tr><td>7</td><td>Day 5 Extension</td><td>변례창신법</td><td>examples/ 베껴 변형, 0에서 만들지 않는다</td></tr>
+      <tr><td>8</td><td>Day 6 Pi Package</td><td>반복참정법</td><td>붙이기 전 한 번 더 검토 (keywords 누락 점검)</td></tr>
       <tr><td>9</td><td>Day 7 회고</td><td>종핵파즐법</td><td>모은 걸 빗질해 5분 데모로 압축</td></tr>
       <tr><td>10</td><td>워크샵 결정</td><td>선정문목법</td><td>목차·구조 먼저</td></tr>
       <tr><td>11</td><td>4시간 흐름</td><td>정과실천법</td><td>목표량을 정하고 덜어낸다</td></tr>
-      <tr><td>12</td><td>카탈로그</td><td>취선논단법</td><td>검증된 것만 카탈로그에</td></tr>
-      <tr><td>전 챕터</td><td>여백</td><td>수사차록법</td><td>떠오른 것 즉시 기록</td></tr>
+      <tr><td>12</td><td>카탈로그</td><td>취선논단법 + 무징불신법</td><td>1차 자료 출처 명시 + 강사 검증 통과만</td></tr>
+      <tr><td>전 챕터</td><td>여백</td><td>수사차록법</td><td>떠오른 것 즉시 기록 (textarea)</td></tr>
       <tr><td>전 챕터</td><td>확인</td><td>반복참정법</td><td>매 챕터 끝 적용형 질문 3개</td></tr>
+      <tr><td>전 교재</td><td>사실 분리</td><td>무징불신법</td><td>fact 박스 / metaphor 박스 명시 분리 — v0.2 핵심 원칙</td></tr>
     </tbody>
   </table>
 
   <h3>상황별 빠른 참조</h3>
   <ul>
     <li><strong>막혔을 때</strong> → 여박총피법 (왜 막혔는지 한 겹 더 벗기기)</li>
-    <li><strong>의심 들 때</strong> → 무징불신법 (근거 확인)</li>
+    <li><strong>의심 들 때</strong> → 무징불신법 (1차 자료 확인 — pi README · docs)</li>
     <li><strong>지름길 찾을 때</strong> → 당구첩경법 (지름길 모색)</li>
     <li><strong>회고할 때</strong> → 종핵파즐법 + 채적명리법 (적용으로 증명)</li>
     <li><strong>판단 흔들릴 때</strong> → 공심공안법 (선입견 배제) + 일반지도법 (반대 사고)</li>
+    <li><strong>설명 작성 시 (강사용)</strong> → 무징불신법 — 메타포는 메타포 박스, 사실은 fact 박스. 섞지 말 것.</li>
   </ul>
 
   <div class="chapter-nav">
@@ -1268,52 +1624,56 @@ pi --package .
 
   <p>7일 미션의 모든 체크 항목을 한 페이지에 모았다. 출력해서 책상 옆에 두면 좋다.</p>
 
-  <h3>Day 1 — 환경 세트업</h3>
+  <h3>Day 1 — 설치 + 부팅</h3>
   <ul>
-    <li>☐ pi.dev 설치 (npm 또는 공식 스크립트)</li>
-    <li>☐ Claude/OpenAI/Gemini API 키 중 1개 설정</li>
+    <li>☐ <code>curl -fsSL https://pi.dev/install.sh | sh</code> 또는 <code>npm install -g @earendil-works/pi-coding-agent</code></li>
+    <li>☐ API 키(<code>ANTHROPIC_API_KEY</code> 등) 환경변수 OR <code>/login</code> 구독</li>
     <li>☐ <code>pi</code> 첫 실행 — 응답 확인</li>
-    <li>☐ examples/ 50개+ 디렉토리 한 번 훑기</li>
+    <li>☐ 기본 도구 4개(<code>read</code>·<code>write</code>·<code>edit</code>·<code>bash</code>) 중 1개 호출 확인</li>
     <li>☐ 막힌 지점 메모 (워크샵 자산)</li>
   </ul>
 
   <h3>Day 2 — 예제 분해</h3>
   <ul>
-    <li>☐ 관심 가는 예제 1개 선택</li>
-    <li>☐ 파일 트리 4블록 라벨링</li>
-    <li>☐ 한 번 실행 → 결과 확인</li>
-    <li>☐ Prompt Template 한 줄 수정 → 변화 확인</li>
+    <li>☐ <code>examples/extensions/</code>에서 1개 선택</li>
+    <li>☐ 처음부터 끝까지 읽고 <code>pi.</code> 메서드 호출 표시</li>
+    <li>☐ <code>pi -e ./examples/extensions/&lt;이름&gt;.ts</code>로 임시 로드 → 작동 확인</li>
+    <li>☐ 한 줄 수정 → 변화 확인</li>
   </ul>
 
-  <h3>Day 3 — 영혼 작성</h3>
+  <h3>Day 3 — 영혼 (AGENTS.md + Prompt Template)</h3>
   <ul>
-    <li>☐ <code>prompts/persona-{이름}.md</code> 생성</li>
-    <li>☐ 자주 쓰는 말 / 안 쓰는 말 / 기본 자세 / 거절 방식 / 결과 형식 / 관계 6개 항목</li>
-    <li>☐ 본인 카톡·메모 문장 5개로 톤 검증</li>
-    <li>☐ 예제에 끼워 호출 → 톤 변화 확인</li>
+    <li>☐ <code>~/.pi/agent/AGENTS.md</code> 또는 프로젝트 <code>AGENTS.md</code> 생성</li>
+    <li>☐ 6개 섹션 (누구 / 자주 쓰는 말 / 안 쓰는 말 / 기본 자세 / 거절·반대 / 결과 형식)</li>
+    <li>☐ 본인 카톡·메모 5문장으로 톤 검증</li>
+    <li>☐ Prompt Template 1개 (<code>~/.pi/agent/prompts/&lt;이름&gt;.md</code> · frontmatter <code>description</code>)</li>
+    <li>☐ <code>/name</code>으로 expand 작동 확인</li>
   </ul>
 
-  <h3>Day 4 — 능력 1개</h3>
+  <h3>Day 4 — Skill 1개</h3>
   <ul>
-    <li>☐ <code>skills/이름/README.md</code> 생성</li>
-    <li>☐ 능력 이름 / 호출 시점 / 입력 / 출력 / 과정 / 도구</li>
-    <li>☐ <code>tools.json</code> 도구 목록</li>
-    <li>☐ <code>/skill:이름</code> 호출 작동 확인</li>
+    <li>☐ <code>~/.pi/agent/skills/&lt;이름&gt;/SKILL.md</code> 생성 (디렉토리명 = name)</li>
+    <li>☐ frontmatter 필수 (<code>name</code>, <code>description</code>)</li>
+    <li>☐ When to invoke / Steps / Resources 본문</li>
+    <li>☐ <code>/skill:&lt;이름&gt;</code> 호출 작동 확인</li>
+    <li>☐ description 자동 매칭(자연어 호출) 테스트</li>
   </ul>
 
-  <h3>Day 5 — 외장 1개</h3>
+  <h3>Day 5 — Extension 1개</h3>
   <ul>
-    <li>☐ 필요한 도구 1개 선정</li>
-    <li>☐ examples/에서 비슷한 Extension 찾기</li>
-    <li>☐ 복사 후 이름·로직 수정</li>
-    <li>☐ Skill에 연결 → 외부 데이터 가져오는지 확인</li>
+    <li>☐ <code>examples/extensions/</code>에서 비슷한 1개 찾기</li>
+    <li>☐ <code>~/.pi/agent/extensions/&lt;이름&gt;.ts</code>에 복사 후 변형</li>
+    <li>☐ <code>pi.registerTool</code> 또는 <code>pi.registerCommand</code> 또는 <code>pi.on</code> 작성</li>
+    <li>☐ <code>/reload</code> → tool/command 등록 확인</li>
+    <li>☐ Skill에서 호출 → 외부 데이터 가져오는지 확인</li>
   </ul>
 
-  <h3>Day 6 — 통합 시운전</h3>
+  <h3>Day 6 — Pi Package 묶기</h3>
   <ul>
-    <li>☐ <code>package.json</code> pi 매니페스트</li>
-    <li>☐ 패키지로 부팅</li>
-    <li>☐ 본인 실제 워크 1건 호출</li>
+    <li>☐ <code>package.json</code>에 <code>keywords: ["pi-package"]</code> + <code>pi</code> 매니페스트</li>
+    <li>☐ <code>extensions/</code>, <code>skills/</code>, <code>prompts/</code> 디렉토리 배치</li>
+    <li>☐ <code>pi install ./</code> → 스타트업 헤더에서 로드 확인</li>
+    <li>☐ 본인 실제 워크 1건으로 한 사이클 완주</li>
     <li>☐ 가장 큰 막힘 1개 수정</li>
   </ul>
 
@@ -1321,15 +1681,15 @@ pi --package .
   <ul>
     <li>☐ 회고 4질문 답 정리</li>
     <li>☐ 카탈로그 v0.1 검증 (✅/❌/➕)</li>
-    <li>☐ 5분 데모 시나리오 작성</li>
+    <li>☐ 5분 데모 시나리오 작성 (AGENTS.md → SKILL.md → Extension → 호출 시연 → 마무리)</li>
     <li>☐ 워크샵 04단계용 본인 봇 화면 정리</li>
   </ul>
 
   <h3>워크샵 준비 (사전)</h3>
   <ul>
     <li>☐ Q1~Q6 결정 외부에 5분 설명 가능</li>
-    <li>☐ 사전 안내문 초안 (체크리스트 4개 + 거절 기준)</li>
-    <li>☐ 모듈 카탈로그 v0.2 (운영 원칙 5개 충족)</li>
+    <li>☐ 사전 안내문 초안 (체크리스트 5개 + 거절 기준)</li>
+    <li>☐ 모듈 카탈로그 v0.2 — 1차 자료 출처 명시 + 강사 검증 통과</li>
     <li>☐ research-bot 미니 하네스 30분 부팅 시연 리허설</li>
     <li>☐ 본인 봇 5분 데모 리허설</li>
   </ul>
@@ -1342,38 +1702,35 @@ pi --package .
 
 <!-- ============== Appendix C ============== -->
 <section class="chapter" id="ap-template">
-  <h2>부록 C. 핵심 파일 템플릿</h2>
+  <h2>부록 C. 핵심 파일 템플릿 (1차 자료 검증판)</h2>
   <div class="chapter-meta">부록</div>
 
-  <p>1주 미션 중 바로 복사해서 쓸 수 있는 양식 4개.</p>
+  <p>1주 미션 중 바로 복사해서 쓸 수 있는 양식. 모두 pi 공식 docs 기준.</p>
 
-  <h3>C.1 — package.json (Pi Package 매니페스트)</h3>
+  <h3>C.1 — package.json (Pi Package 매니페스트 · 공식 형태)</h3>
   <pre><code>{
-  "name": "@taikhan/research-bot",
+  "name": "taikhan-research-bot",
   "version": "0.1.0",
   "description": "강의 자료 리서치 하네스",
+  "keywords": ["pi-package"],
   "pi": {
-    "extensions": [
-      "./ext/web-search.ts",
-      "./ext/obsidian-read.ts"
-    ],
-    "skills": [
-      "./skills/lecture-research"
-    ],
-    "prompts": [
-      "./prompts/persona-taikan.md"
-    ],
-    "themes": [
-      "./themes/calm-dark.json"
-    ]
+    "extensions": ["./extensions"],
+    "skills": ["./skills"],
+    "prompts": ["./prompts"],
+    "themes": ["./themes"]
   },
-  "dependencies": {
-    "@earendil-works/pi": "latest"
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*",
+    "@earendil-works/pi-ai": "*",
+    "@earendil-works/pi-agent-core": "*",
+    "@earendil-works/pi-tui": "*",
+    "typebox": "*"
   }
 }</code></pre>
+  <p>출처: <code>pi/packages/coding-agent/docs/packages.md:113~166</code>. <strong>keywords와 peerDependencies 빠뜨리지 말 것.</strong></p>
 
-  <h3>C.2 — persona-{이름}.md (영혼 템플릿)</h3>
-  <pre><code># persona-{이름}.md
+  <h3>C.2 — AGENTS.md (영혼 · 자동 로드 컨텍스트)</h3>
+  <pre><code># AGENTS.md   (~/.pi/agent/AGENTS.md 또는 프로젝트 루트)
 
 ## 누구
 {본인을 한 줄로}
@@ -1397,59 +1754,90 @@ pi --package .
 - {결론-근거-액션 순서 등}
 
 ## 사용자와의 관계
-- {호칭·말 거리}
-</code></pre>
+- {호칭·말 거리}</code></pre>
+  <p>출처: <code>pi/packages/coding-agent/README.md:296~309</code> (Context Files). pi가 부팅 시 자동 로드.</p>
 
-  <h3>C.3 — skills/{이름}/README.md (능력 정의)</h3>
-  <pre><code># {능력 이름}
+  <h3>C.3 — prompts/&lt;name&gt;.md (Prompt Template · 슬래시 커맨드)</h3>
+  <pre><code>&lt;!-- ~/.pi/agent/prompts/review.md → /review로 호출 --&gt;
+---
+description: Review staged git changes
+argument-hint: "[focus]"
+---
+Review the staged changes (`git diff --cached`). Focus on:
+- Bugs and logic errors
+- Security issues
+- Error handling gaps
+- Specifically: $1</code></pre>
+  <p>출처: <code>pi/packages/coding-agent/docs/prompt-templates.md</code>. <strong>인자</strong>: <code>$1</code>, <code>$@</code>, <code>$ARGUMENTS</code>, <code>${@:N}</code>, <code>${@:N:L}</code>.</p>
 
-호출: `/skill:{이름}`
+  <h3>C.4 — skills/&lt;name&gt;/SKILL.md (Agent Skills 표준)</h3>
+  <pre><code>---
+name: lecture-research
+description: 강의 자료 리서치 — 주제 1개 받아서 핵심 개념 5 + 비유 + 비교표 + 참고링크 3 출력. 강의 준비할 때 부른다.
+---
 
-## 언제 부르는가
-{한 줄로}
+# Lecture Research
 
-## 입력
-- {input 1}: {타입} — {설명}
+## When to invoke
+- 강의 자료 만들 때 주제 1개를 핵심으로 분해해야 할 때
 
-## 출력
-- {output 1}: {타입} — {설명}
+## Steps
+1. 주제 분해 — 핵심 개념 5개 추출
+2. 비유 1개 선정
+3. 비교표 1개 작성
+4. 참고 링크 3개 (출처 명시)
 
-## 과정
-1. {단계 1}
-2. {단계 2}
-3. {단계 3}
+## Resources
+- See [references/sources.md](references/sources.md) for source rubric</code></pre>
+  <p>출처: <code>pi/packages/coding-agent/docs/skills.md</code> + <a href="https://agentskills.io/specification">agentskills.io 표준</a>. <strong>name이 부모 디렉토리명과 일치해야 함.</strong></p>
 
-## 쓰는 도구
-- {tool name}: {용도}
-</code></pre>
+  <h3>C.5 — extensions/&lt;name&gt;.ts (TypeScript Extension)</h3>
+  <pre><code>import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import { Type } from "typebox";
 
-  <h3>C.4 — ext/{이름}.ts (Extension 스켈레톤)</h3>
-  <pre><code>import { defineExtension } from "@earendil-works/pi";
+export default function (pi: ExtensionAPI) {
+  pi.registerTool({
+    name: "{tool-name}",
+    label: "{Display label}",
+    description: "{What it does — agent reads this}",
+    parameters: Type.Object({
+      input: Type.String({ description: "Input description" }),
+    }),
+    async execute(toolCallId, params, signal, onUpdate, ctx) {
+      // 본인 로직
+      return {
+        content: [{ type: "text", text: `Result: ${params.input}` }],
+        details: {},
+      };
+    },
+  });
 
-export default defineExtension({
-  name: "{이름}",
-  description: "{한 줄 설명}",
-  inputs: {
-    {inputName}: { type: "string", required: true }
-  },
-  async run({ {inputName} }) {
-    // 1) 본인 로직
-    // 2) 반환
-    return { result: "..." };
-  }
-});</code></pre>
+  // 선택: 슬래시 커맨드
+  pi.registerCommand("{cmd-name}", {
+    description: "{Command description}",
+    handler: async (args, ctx) =&gt; {
+      ctx.ui.notify(`Got: ${args}`, "info");
+    },
+  });
 
-  <h3>C.5 — 카탈로그 부품 1개 양식 (워크샵 사전 배포용)</h3>
+  // 선택: 이벤트 후크
+  pi.on("tool_call", async (event, ctx) =&gt; {
+    // 권한 게이트, 로깅 등
+  });
+}</code></pre>
+  <p>출처: <code>pi/packages/coding-agent/docs/extensions.md:56~100</code>.</p>
+
+  <h3>C.6 — 카탈로그 부품 1개 양식 (워크샵 사전 배포용)</h3>
   <pre><code>## {부품 이름}
 
-- **블록**: 🧩 Extension / 🛠️ Skill / ✍️ Prompt / 🎨 Theme
+- **종류**: ✍️ Prompt Template / 🛠️ Skill / 🧩 Extension / 🎨 Theme
 - **난이도**: ★ / ★★ / ★★★
+- **1차 자료 출처**: pi/examples/... · npm:@... · 강사 자작
 - **언제 쓰나**: {한 줄}
 - **입력**: {타입·예시}
 - **출력**: {타입·예시}
 - **유사 부품**: {대안 1~2개}
-- **강사 검증**: ☐ 완료 / ☐ 미검증
-</code></pre>
+- **강사 검증**: ☐ 임시 로드(-e) 통과 / ☐ 미검증</code></pre>
 
   <div class="chapter-nav">
     <a class="prev" href="#ap-checklist"><span class="dir">← 이전</span>B. 실습 체크리스트</a>
@@ -1462,33 +1850,49 @@ export default defineExtension({
   <h2>부록 D. 참고자료 & 학습 로드맵</h2>
   <div class="chapter-meta">부록</div>
 
-  <h3>pi.dev 공식 자료</h3>
+  <h3>pi.dev 공식 1차 자료 (이 교재의 출처)</h3>
   <ul>
-    <li><a href="https://pi.dev/" target="_blank" rel="noreferrer">pi.dev 공식 사이트</a> — 설치 가이드 · 매뉴얼</li>
-    <li><a href="https://github.com/earendil-works/pi/tree/main/packages/coding-agent" target="_blank" rel="noreferrer">github.com/earendil-works/pi · coding-agent 패키지</a> — 가장 정리된 레퍼런스</li>
-    <li><a href="https://news.hada.io/topic?id=26324" target="_blank" rel="noreferrer">한국 커뮤니티 반응 (GeekNews)</a> — 도입 후기·논점</li>
+    <li><a href="https://github.com/earendil-works/pi" target="_blank">github.com/earendil-works/pi</a> — 모노레포 (이 교재 검증 시점 commit <code>40c05f55</code>)</li>
+    <li><a href="https://github.com/earendil-works/pi/blob/main/packages/coding-agent/README.md" target="_blank">packages/coding-agent/README.md</a> — pi 코딩 에이전트 핵심 docs (이 교재 사실 진술의 70%)</li>
+    <li><a href="https://github.com/earendil-works/pi/blob/main/AGENTS.md" target="_blank">pi/AGENTS.md</a> — pi 자체 프로젝트의 개발 룰 (좋은 AGENTS.md 예시)</li>
+    <li><a href="https://github.com/earendil-works/pi/tree/main/packages/coding-agent/docs" target="_blank">packages/coding-agent/docs/</a> — 영역별 상세 docs (prompt-templates / skills / extensions / themes / packages / sessions / settings / sdk / rpc 등)</li>
+    <li><a href="https://github.com/earendil-works/pi/tree/main/packages/coding-agent/examples/extensions" target="_blank">examples/extensions/</a> — 30+ 실제 작동 예제</li>
+    <li><a href="https://pi.dev/" target="_blank">pi.dev</a> — 공식 사이트 (설치 스크립트)</li>
+    <li><a href="https://pi.dev/packages" target="_blank">pi.dev/packages</a> — 패키지 갤러리 (keywords: pi-package)</li>
   </ul>
 
-  <h3>관련 표준 · 컨셉</h3>
+  <h3>관련 표준</h3>
   <ul>
-    <li><strong>Agent Skills 표준</strong> — pi의 Skills 블록이 따르는 규격. <code>/skill:이름</code> 호출 컨벤션.</li>
-    <li><strong>MCP (Model Context Protocol)</strong> — Extension의 인접 표준. 외부 도구와 LLM 연결.</li>
-    <li><strong>프로젝트 아라 (Project Ara)</strong> — 모듈러 스마트폰 컨셉. 워크샵 메타포의 원천.</li>
+    <li><a href="https://agentskills.io/specification" target="_blank">Agent Skills 표준 (agentskills.io)</a> — pi의 Skills가 따르는 규격. <code>SKILL.md</code> frontmatter 정의.</li>
+    <li><strong>typebox</strong> — Extension의 tool parameter 정의에 쓰임. JSON Schema 기반 런타임 검증.</li>
   </ul>
+
+  <h3>참고 — pi가 의도적으로 빌트인 안 한 것 (philosophy)</h3>
+  <ul>
+    <li><strong>MCP</strong> — pi는 빌트인 MCP 없음. 필요하면 Extension으로. <a href="https://mariozechner.at/posts/2025-11-02-what-if-you-dont-need-mcp/">"What if you don't need MCP?"</a></li>
+    <li><strong>서브 에이전트</strong> — tmux로 pi 인스턴스 spawn 또는 Extension으로 직접 구현</li>
+    <li><strong>플랜 모드</strong> — 파일로 plan 쓰거나 Extension</li>
+    <li><strong>권한 팝업</strong> — 컨테이너 또는 Extension으로 직접 구현 (<code>confirm-destructive.ts</code> 참고)</li>
+    <li><strong>빌트인 todo</strong> — TODO.md 파일 또는 Extension</li>
+    <li><strong>백그라운드 bash</strong> — tmux 사용</li>
+  </ul>
+  <p>출처: <code>pi/packages/coding-agent/README.md:468~484</code> (Philosophy 섹션).</p>
 
   <h3>본 교재 내부 참조</h3>
   <ul>
-    <li><code>taikhan-vault/dev-log/2026-05-14-pi-workshop-design.md</code> — 워크샵 디자인 마스터 노트 (Q1~Q6 결정 누적)</li>
+    <li><code>taikhan-vault/dev-log/2026-05-14-pi-workshop-design.md</code> — 워크샵 디자인 마스터 노트 (Q1~Q6 결정)</li>
     <li><code>taikhan-vault/tasks/2026-05-14-pi-workshop-prep-guide.md</code> — 1주 학습 가이드 원본</li>
-    <li><code>~/.openclaw/workspace/projects/pi-workshop/</code> — 시각 자료 보존 · 카탈로그 이미지</li>
+    <li><code>taikhan-vault/dev-log/2026-05-14-pi-workshop-textbook-html.md</code> — 교재 발행 + v0.1 → v0.2 갱신 사유</li>
+    <li><code>~/.openclaw/workspace/AGENTS.md</code> — 익환의 영구 규칙 (1차 자료 우선 규칙 추가됨)</li>
+    <li><code>~/.openclaw/workspace/skills/dasan-textbook/SKILL.md</code> — 다산 교재 스킬 (1차 자료 검증 단계 강제)</li>
   </ul>
 
   <h3>학습 로드맵</h3>
   <table>
     <thead><tr><th>단계</th><th>기간</th><th>목표</th></tr></thead>
     <tbody>
-      <tr><td>0. 사전 점검</td><td>D-8</td><td>API 키 · Node · GitHub 체크</td></tr>
-      <tr><td>1. 1주 미션</td><td>D-7 ~ D-1</td><td>본인 하네스 한 채 + 5분 데모</td></tr>
+      <tr><td>0. 사전 점검</td><td>D-8</td><td>API 키 · Node · GitHub · 마크다운 5종 체크</td></tr>
+      <tr><td>1. 1주 미션</td><td>D-7 ~ D-1</td><td>본인 Pi Package 한 채 + 5분 데모</td></tr>
       <tr><td>2. 워크샵 리허설</td><td>D-1</td><td>02·03·04단계 시연 흐름 체크</td></tr>
       <tr><td>3. 워크샵 1회차</td><td>D-Day</td><td>6~8명 파일럿 · 후기 확보</td></tr>
       <tr><td>4. 회고 + v0.2</td><td>D+3</td><td>카탈로그·교재 갱신</td></tr>
@@ -1498,16 +1902,17 @@ export default defineExtension({
 
   <h3>심화 학습 (워크샵 후 자습)</h3>
   <ul>
-    <li>🎨 <strong>Themes</strong> — 터미널 UI 스타일링 (pi 공식 docs)</li>
-    <li>📦 <strong>Pi Package 번들링 · 배포</strong> — npm publish · git release</li>
-    <li>🧪 <strong>Multi-agent 조합</strong> — Skill이 다른 Skill을 부르는 패턴</li>
+    <li>🧩 <strong>Extension 깊이 파기</strong> — <code>docs/extensions.md</code> Events / ExtensionContext / 커스텀 UI / 세션 영속화</li>
+    <li>🎨 <strong>Themes</strong> — <code>docs/themes.md</code></li>
+    <li>📦 <strong>Pi Package npm publish</strong> — <code>docs/packages.md</code> Gallery Metadata · Dependencies · Filtering</li>
+    <li>🔧 <strong>RPC / SDK 모드</strong> — <code>docs/rpc.md</code>, <code>docs/sdk.md</code>. openclaw가 SDK 통합 레퍼런스.</li>
     <li>📚 <strong>다산선생 지식경영법</strong> (정민) — 학습 방법론 전체 50법</li>
   </ul>
 
   <hr/>
 
   <p style="color: var(--text-mute); font-size: 13px;">
-    📝 이 교재는 v0.1. Day 7 회고 후 v0.2로 갱신될 자료. 모든 챕터의 "내 생각 쓰기"는 본인 vault로 옮겨 누적.
+    📝 이 교재는 <strong>v0.2 (1차 자료 검증판)</strong>. v0.1은 타이칸 디자인 노트만 보고 작성해 무징불신법을 위반했음 — pi 실제 코드와 다수 불일치. v0.2는 <a href="https://github.com/earendil-works/pi">github.com/earendil-works/pi</a> commit <code>40c05f55</code>를 통독한 결과로 재작성. Day 7 회고 후 v0.3 갱신 예정.
   </p>
 
   <div class="chapter-nav">
@@ -1519,13 +1924,12 @@ export default defineExtension({
 </main>
 
 <script>
-  // Sidebar active highlight + progress
   (function() {
     const navLinks = Array.from(document.querySelectorAll('#chaptersNav a'));
     const sections = navLinks
       .map(a => document.querySelector(a.getAttribute('href')))
       .filter(Boolean);
-    const totalChapters = 12; // for progress (chapters only, not appendix)
+    const totalChapters = 12;
     const progressBar = document.getElementById('progressBar');
     const progressLabel = document.getElementById('progressLabel');
 
@@ -1538,7 +1942,6 @@ export default defineExtension({
       navLinks.forEach(a => a.classList.remove('active'));
       const active = navLinks.find(a => a.getAttribute('href') === '#' + current.id);
       if (active) active.classList.add('active');
-      // progress (only ch1~ch12)
       const idx = sections.findIndex(s => s.id === current.id);
       const chapterIdx = Math.max(0, Math.min(totalChapters, idx + 1));
       const ratio = current.id.startsWith('ch') ? chapterIdx / totalChapters : 1;
@@ -1552,9 +1955,8 @@ export default defineExtension({
     update();
   })();
 
-  // Persist textarea notes locally
   (function() {
-    const key = 'pi-textbook-notes-v1';
+    const key = 'pi-textbook-notes-v2';
     const saved = JSON.parse(localStorage.getItem(key) || '{}');
     const areas = Array.from(document.querySelectorAll('textarea.note'));
     areas.forEach((ta, i) => {
